@@ -4,7 +4,6 @@ import com.mis.bookingmodels.Building;
 import com.mis.bookingmodels.User;
 import com.mis.bookingrepositories.BookingRepo;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +26,7 @@ public class BookingService {
         }
         List<Building> buildingList = bookingRepo.findAvailableSeatsAtLocation(location);
         StringBuilder buildings = new StringBuilder();
-        for(Building b : buildingList) buildings.append(b.toString1() + "\n");
+        for(Building b : buildingList) buildings.append(b.toString1()).append("\n");
         return new ResponseEntity<>(buildings.toString(),HttpStatus.FOUND);
     }
 }
