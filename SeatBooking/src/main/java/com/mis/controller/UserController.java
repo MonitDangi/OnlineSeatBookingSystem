@@ -18,5 +18,11 @@ public class UserController {
         userService.add(user);
         return "Added User Successfully";
     }
-
+    @GetMapping("/login")
+    public String login(@RequestBody User user) throws CustException {
+        if(userService.valid(user))
+            return "Welcome";
+        else
+            return "Invalid Id/Password";
+    }
 }
