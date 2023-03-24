@@ -79,4 +79,10 @@ public class Building {
                 ", floorList=" + floorList +
                 '}';
     }
+    public String toString1() {
+        return "buildingName='" + buildingName + '\'' +
+                ", location='" + location + '\'' +
+                ", totalCapacity=" + totalCapacity +
+                '.';
+    }
 }
