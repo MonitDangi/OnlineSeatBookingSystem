@@ -7,4 +7,5 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @Repository
 public interface UserRepo extends JpaRepository<User,String> {
+
 }

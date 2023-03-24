@@ -25,12 +25,4 @@ public class UserService {
         user.setPassword(this.passwordEncoder.encode(user.getPassword()));
         userRepo.save(user);
     }
-
-    public boolean valid(User user) throws CustException {
-        Optional<User>us=userRepo.findById(user.getUserId());
-        if(us.isEmpty()){
-            throw new CustException("No such user found");
-        }
-        return passwordEncoder.matches(user.getPassword(), us.get().getPassword());
-    }
 }
