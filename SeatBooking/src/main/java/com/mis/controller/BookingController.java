@@ -20,4 +20,5 @@ public class BookingController {
         String location = custom.getLocation();
         return bookingService.findByLocation(userId, userPassword, location);
     }
+
 }
