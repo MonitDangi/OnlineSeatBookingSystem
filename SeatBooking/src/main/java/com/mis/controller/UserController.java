@@ -15,8 +15,23 @@ public class UserController {
     UserService userService;
     @PostMapping("/adduser")
     public String adduser(@RequestBody  User user) throws CustException {
+        user.setUserType(0);
         userService.add(user);
         return "Added User Successfully";
     }
+
+    @PostMapping("/addAdmin")
+    public String adddm(@RequestBody  User user) throws CustException {
+        userService.add(user);
+        return "Added Manager Successfully";
+    }
+    @GetMapping("/login")
+    public String login(@RequestBody User user)throws CustException{
+        if(userService.valid(user))
+            return "Welcome";
+        else
+            return "Invalid id/password";
+    }
+
 
 }
