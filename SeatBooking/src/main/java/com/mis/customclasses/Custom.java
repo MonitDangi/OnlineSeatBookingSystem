@@ -4,6 +4,7 @@ public class Custom {
     private String userPassword;
     private String location;
     private String buildingName;
+    private int totalCapacity;
     private int floorNumber;
     private int roomNo;
     private int seatNo;
@@ -16,6 +17,18 @@ public class Custom {
         this.userId = userId;
         this.userPassword = userPassword;
         this.location = location;
+    }
+
+    public String getBuildingName() {
+        return buildingName;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setBuildingName(String buildingName) {
+        this.buildingName = buildingName;
     }
 
     public String getUserId() {
