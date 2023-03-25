@@ -37,6 +37,12 @@ public class Floor {
                 '}';
     }
 
+    public String toString1() {
+        return "floorNo=" + floorNo +
+                ", floorCapacity=" + floorCapacity +
+                '.';
+    }
+
     public Integer getFloorNo() {
         return floorNo;
     }

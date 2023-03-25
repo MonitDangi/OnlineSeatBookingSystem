@@ -4,7 +4,6 @@ import com.mis.CustException.CustException;
 import com.mis.EmailService.EmailSenderService;
 import com.mis.bookingmodels.User;
 import com.mis.bookingrepositories.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,12 +11,14 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-    @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
-    UserRepo userRepo;
-    @Autowired
-    EmailSenderService emailSenderService;
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepo userRepo;
+    private final EmailSenderService emailSenderService;
+    public UserService(EmailSenderService emailSenderService, UserRepo userRepo, PasswordEncoder passwordEncoder){
+        this.emailSenderService =emailSenderService;
+        this.passwordEncoder = passwordEncoder;
+        this.userRepo = userRepo;
+    }
     public void add(User user) throws CustException {
 
         Optional<User>us=userRepo.findById(user.getUserId());
@@ -30,7 +31,7 @@ public class UserService {
         userRepo.save(user);
     }
 
-    public boolean valid(User user) throws CustException {
+    public boolean verifyUser(User user) throws CustException {
         Optional<User>temp=userRepo.findById(user.getUserId());
         if(temp.isEmpty())
         {

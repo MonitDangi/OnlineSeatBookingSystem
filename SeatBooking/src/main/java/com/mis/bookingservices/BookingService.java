@@ -3,6 +3,7 @@ package com.mis.bookingservices;
 import com.mis.bookingmodels.Building;
 import com.mis.bookingmodels.User;
 import com.mis.bookingrepositories.BookingRepo;
+import com.mis.customclasses.Custom;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,15 +17,17 @@ public class BookingService {
     public BookingService(BookingRepo bookingRepo){
         this.bookingRepo = bookingRepo;
     }
-    boolean validateUser(String userName, String userPassword){
-        Optional<User> validUser = bookingRepo.validateUser(userName, userPassword);
+    public boolean validateUser(Custom custom){
+        String userId = custom.getUserId();
+        String userPassword = custom.getUserPassword();
+        Optional<User> validUser = bookingRepo.validateUser(userId, userPassword);
         return validUser.isPresent();
     }
-    public ResponseEntity<String> findByLocation(String userId, String userPassword, String location) {
-        if(!validateUser(userId, userPassword)){
+    public ResponseEntity<String> findByLocation(Custom custom) {
+        if(!validateUser(custom)){
             return new ResponseEntity<>("No such user exist.", HttpStatus.BAD_REQUEST);
         }
-        List<Building> buildingList = bookingRepo.findAvailableSeatsAtLocation(location);
+        List<Building> buildingList = bookingRepo.findAvailableSeatsAtLocation(custom.getLocation());
         StringBuilder buildings = new StringBuilder();
         for(Building b : buildingList) buildings.append(b.toString1()).append("\n");
         return new ResponseEntity<>(buildings.toString(),HttpStatus.FOUND);

@@ -1,45 +1,85 @@
 package com.mis.customclasses;
-public class Custom {
-    private String userId;
-    private String userPassword;
-    private String location;
-    private String buildingName;
-    private int totalCapacity;
-    private int floorNumber;
-    private int roomNo;
-    private int seatNo;
 
+import com.mis.bookingmodels.*;
+
+public class Custom {
+    User user;
+    Booking booking;
+    Building building;
+    Floor floor;
+    Room room;
 
     public Custom() {
     }
 
-    public Custom(String userId, String userPassword, String location) {
-        this.userId = userId;
-        this.userPassword = userPassword;
-        this.location = location;
+    public Custom(User user){
+        this.user = user;
     }
+    public Custom(User user, Booking booking){
+        this.user = user;
+        this.booking = booking;
+    }
+    public Custom(User user, Booking booking, Building building){
+        this.user = user;
+        this.booking = booking;
+        this.building = building;
+    }
+    public Custom(User user, Booking booking, Building building, Floor floor){
+        this.user = user;
+        this.booking = booking;
+        this.building = building;
+        this.floor = floor;
+    }
+    public Custom(User user, Booking booking, Building building, Floor floor, Room room){
+        this.user = user;
+        this.booking = booking;
+        this.building = building;
+        this.floor = floor;
+        this.room = room;
+    }
+
 
     public String getBuildingName() {
-        return buildingName;
+        return building.getBuildingName();
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public User getUser() {
+        return user;
     }
 
-    public void setBuildingName(String buildingName) {
-        this.buildingName = buildingName;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public String getUserId() {
-        return userId;
+    public Booking getBooking() {
+        return booking;
     }
 
-    public String getUserPassword() {
-        return userPassword;
+    public void setBooking(Booking booking) {
+        this.booking = booking;
     }
 
-    public String getLocation() {
-        return location;
+    public Building getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(Building building) {
+        this.building = building;
+    }
+
+    public Floor getFloor() {
+        return floor;
+    }
+
+    public void setFloor(Floor floor) {
+        this.floor = floor;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
     }
 }

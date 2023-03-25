@@ -1,5 +1,4 @@
-package com.mis.controller;
-
+package com.mis.controllers;
 import com.mis.CustException.CustException;
 import com.mis.bookingmodels.User;
 import com.mis.bookingservices.UserService;
@@ -27,7 +26,7 @@ public class UserController {
     }
     @GetMapping("/login")
     public String login(@RequestBody User user) throws CustException {
-        if(userService.valid(user))
+        if(userService.verifyUser(user))
             return "Welcome";
         else
             return "Invalid Id/Password";
