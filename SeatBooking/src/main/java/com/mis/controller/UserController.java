@@ -15,6 +15,13 @@ public class UserController {
     UserService userService;
     @PostMapping("/adduser")
     public String adduser(@RequestBody  User user) throws CustException {
+        user.setUserType(0);
+        userService.add(user);
+        return "Added User Successfully";
+    }
+    @PostMapping("/addAdmin")
+    public String addAdmin(@RequestBody  User user) throws CustException {
+        user.setUserType(1);
         userService.add(user);
         return "Added User Successfully";
     }

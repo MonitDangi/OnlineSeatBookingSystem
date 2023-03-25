@@ -1,6 +1,7 @@
 package com.mis.bookingservices;
 
 import com.mis.CustException.CustException;
+import com.mis.EmailService.EmailSenderService;
 import com.mis.bookingmodels.User;
 import com.mis.bookingrepositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ public class UserService {
     PasswordEncoder passwordEncoder;
     @Autowired
     UserRepo userRepo;
+    @Autowired
+    EmailSenderService emailSenderService;
     public void add(User user) throws CustException {
 
         Optional<User>us=userRepo.findById(user.getUserId());
@@ -22,6 +25,7 @@ public class UserService {
         {
             throw new CustException("User Already Exists");
         }
+        emailSenderService.sendSimpleEmail(user.getUserEmail(), "Registration Successful","Thanks for registering");
         user.setPassword(this.passwordEncoder.encode(user.getPassword()));
         userRepo.save(user);
     }
