@@ -1,4 +1,4 @@
-package com.mis.controller;
+package com.mis.controllers;
 
 import com.mis.CustException.CustException;
 import com.mis.bookingmodels.Building;
@@ -30,9 +30,10 @@ public class BuildingController {
         this.userService = userService;
     }
 
+    @PostMapping("/addBuilding")
+    public ResponseEntity<String> addBuilding(@RequestBody Custom custom) throws CustException {
+        //verifyUser
+        userService.verifyUser(custom.)
 
-
-        @PostMapping("/addBuilding")
-        public ResponseEntity<String> addBuilding(@RequestBody Custom custom) throws CustException {
     }
 }

@@ -45,4 +45,14 @@ public class BuildingService {
         for(Floor f : floorsList) floors.append(f.toString1()).append("\n");
         return new ResponseEntity<>(floors.toString(),HttpStatus.FOUND);
     }
+
+    public void verifyBuilding(String buildingName) throws CustException {
+
+        Optional<Building> opt = buildingRepo.findById(buildingName);
+        if(opt.isEmpty()){
+            throw new CustException("No such building found");
+        }
+
+
+    }
 }
