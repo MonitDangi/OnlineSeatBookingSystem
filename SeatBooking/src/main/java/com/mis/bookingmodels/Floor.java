@@ -33,8 +33,6 @@ public class Floor {
         return "Floor{" +
                 "floorNo=" + floorNo +
                 ", floorCapacity=" + floorCapacity +
-                ", building=" + building +
-                ", roomList=" + roomList +
                 '}';
     }
 

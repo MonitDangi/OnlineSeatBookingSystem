@@ -6,6 +6,7 @@ import com.mis.bookingrepositories.FloorRepo;
 import com.mis.customclasses.Custom;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,9 +29,7 @@ public class FloorService {
         if(opt == false){
             throw new CustException("No mentioned floor found in given building");
         }
-
-        Optional<Floor> opt1 = floorRepo.findById(custom.getFloor().getFloorNo());
-
+        Optional<Floor> opt1 = floorRepo.findFloor(custom.getFloor().getFloorNo(), custom.getBuilding().getBuildingName());
         if(opt1.isEmpty()){
             throw new CustException("No mentioned floor available");
         }
@@ -39,5 +38,10 @@ public class FloorService {
 
     public List<Floor> listAllFloors(String buildingName) {
         return floorRepo.findAllFloors(buildingName);
+    }
+
+    public Floor getFloor(Custom custom) {
+        Optional<Floor> opt1 = floorRepo.findFloor(custom.getFloor().getFloorNo(), custom.getBuilding().getBuildingName());
+        return opt1.get();
     }
 }

@@ -94,4 +94,15 @@ public class Custom {
     public String getUserPassword() {
         return user.getPassword();
     }
+
+    @Override
+    public String toString() {
+        return "Custom{" +
+                "user=" + user +
+                ", booking=" + booking +
+                ", building=" + building +
+                ", floor=" + floor +
+                ", room=" + room +
+                '}';
+    }
 }

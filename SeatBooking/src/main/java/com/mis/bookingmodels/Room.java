@@ -84,7 +84,6 @@ public class Room {
 
     public String toString1() {
         return  ", buildingName='" + buildingName + '\'' +
-                ", floor=" + floor +
                 "roomNo=" + roomNo +
                 ", numberOfSeats=" + numberOfSeats;
     }

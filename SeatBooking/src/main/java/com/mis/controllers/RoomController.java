@@ -1,6 +1,7 @@
 package com.mis.controllers;
 
 import com.mis.CustException.CustException;
+import com.mis.bookingmodels.Floor;
 import com.mis.bookingmodels.Room;
 import com.mis.bookingservices.*;
 import com.mis.customclasses.Custom;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -26,15 +28,15 @@ public class RoomController {
     }
 
     @PostMapping("/addNewRoom")
-    public ResponseEntity<String> addNewRoom(Custom custom) throws CustException {
+    public ResponseEntity<String> addNewRoom(@RequestBody Custom custom) throws CustException {
         userService.verifyUser(custom.getUser());
         buildingService.verifyBuilding(custom.getBuildingName());
-        floorService.verifyFloor(custom);
-        Room r = new Room(custom.getRoom().getRoomNo(), custom.getBuildingName(), custom.getRoom().getNumberOfSeats(), custom.getFloor());
+        if(!floorService.verifyFloor(custom))throw new CustException("No such floor exist");
         return roomService.addRoom(custom);
     }
     @GetMapping("/listAllRooms")
-    public ResponseEntity<String> ListAllRooms(Custom custom) throws CustException {
+    public ResponseEntity<String> ListAllRooms(@RequestBody Custom custom) throws CustException {
+        custom.getFloor().setBuilding(custom.getBuilding());
         userService.verifyUser(custom.getUser());
         buildingService.verifyBuilding(custom.getBuildingName());
         floorService.verifyFloor(custom);
