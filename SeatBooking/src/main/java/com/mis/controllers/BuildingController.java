@@ -33,7 +33,13 @@ public class BuildingController {
     @PostMapping("/addBuilding")
     public ResponseEntity<String> addBuilding(@RequestBody Custom custom) throws CustException {
         //verifyUser
-        userService.verifyUser(custom.)
+        userService.verifyUser(custom.getUser());
+
+        //user verified, now adding building
+
+        buildingService.addBuilding(custom.getBuilding());
+
+        return new ResponseEntity<>("Bravo...you added a new building",HttpStatus.ACCEPTED);
 
     }
 }
