@@ -3,13 +3,14 @@ import com.mis.CustException.CustException;
 import com.mis.bookingmodels.User;
 import com.mis.bookingservices.UserService;
 import com.mis.customclasses.PassWord;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
-    @Autowired
-    UserService userService;
+    private final UserService userService;
+    public UserController(UserService userService){
+        this.userService = userService;
+    }
     @PostMapping("/adduser")
     public String adduser(@RequestBody  User user) throws CustException {
         user.setUserType(0);

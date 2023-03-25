@@ -18,11 +18,10 @@ public class Floor {
     @OneToMany(mappedBy = "floor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     List<Room>roomList;
 
-    public Floor(Integer floorNo, int floorCapacity, Building building, List<Room> roomList) {
+    public Floor(Integer floorNo, int floorCapacity, Building building) {
         this.floorNo = floorNo;
         this.floorCapacity = floorCapacity;
         this.building = building;
-        this.roomList = roomList;
     }
 
     public Floor() {

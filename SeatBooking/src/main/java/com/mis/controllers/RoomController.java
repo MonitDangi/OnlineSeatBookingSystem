@@ -4,9 +4,13 @@ import com.mis.CustException.CustException;
 import com.mis.bookingmodels.Room;
 import com.mis.bookingservices.*;
 import com.mis.customclasses.Custom;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class RoomController {
@@ -28,5 +32,18 @@ public class RoomController {
         floorService.verifyFloor(custom);
         Room r = new Room(custom.getRoom().getRoomNo(), custom.getBuildingName(), custom.getRoom().getNumberOfSeats(), custom.getFloor());
         return roomService.addRoom(custom);
+    }
+    @GetMapping("/listAllRooms")
+    public ResponseEntity<String> ListAllRooms(Custom custom) throws CustException {
+        userService.verifyUser(custom.getUser());
+        buildingService.verifyBuilding(custom.getBuildingName());
+        floorService.verifyFloor(custom);
+        List<Room> roomList =  roomService.getAllRooms(custom.getBuildingName(), custom.getFloor().getFloorNo());
+        StringBuilder rooms =  new StringBuilder();
+        rooms.append("Rooms Available:-\n");
+        for(Room r: roomList){
+            rooms.append(r.toString1()).append("\n");
+        }
+        return new ResponseEntity<>(rooms.toString(), HttpStatus.FOUND);
     }
 }

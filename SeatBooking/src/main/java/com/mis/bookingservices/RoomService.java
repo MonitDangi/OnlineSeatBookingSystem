@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,10 +30,14 @@ public class RoomService {
         roomRepo.save(room);
         int roomCapacity = room.getNumberOfSeats();
         for(int i = 0; i < roomCapacity; i++){
-            Seat s = new Seat(i,room.getFloor().getFloorNo(), custom.getBuildingName(), room);
+            Seat s = new Seat(i+1,room.getFloor().getFloorNo(), custom.getBuildingName(), room);
             seatService.addSeat(s);
         }
         String roomString = room.toString() + "\nAdded Successfully.";
         return new ResponseEntity<>(roomString, HttpStatus.ALREADY_REPORTED);
+    }
+
+    public List<Room> getAllRooms(String buildingName, int floorNo) {
+        return roomRepo.getAllRooms(buildingName, floorNo);
     }
 }

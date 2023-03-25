@@ -11,12 +11,10 @@ public class Building {
     private String location;
     private int totalCapacity;
 
-    public Building(String buildingName, String location, int totalCapacity, Booking booking, List<Floor> floorList) {
+    public Building(String buildingName, String location, int totalCapacity) {
         this.buildingName = buildingName;
         this.location = location;
         this.totalCapacity = totalCapacity;
-        this.booking = booking;
-        this.floorList = floorList;
     }
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

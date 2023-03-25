@@ -1,16 +1,14 @@
 package com.mis.controllers;
 
-import com.mis.CustException.CustException;
 import com.mis.bookingservices.BookingService;
 import com.mis.bookingservices.BuildingService;
-import com.mis.customclasses.Custom;
-import org.springframework.http.HttpStatus;
+import com.mis.customclasses.Location;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/BookingService")
 public class BookingController {
     private final BookingService bookingService;
     private final BuildingService buildingService;
@@ -18,15 +16,8 @@ public class BookingController {
         this.bookingService = bookingService;
         this.buildingService = buildingService;
     }
-    @RequestMapping("/findByLocation")
-    public ResponseEntity<String> findByLocation(Custom custom){
-        return bookingService.findByLocation(custom);
-    }
-    @RequestMapping("/findByBuilding")
-    public ResponseEntity<String> findByBuilding(Custom custom) throws CustException {
-        if(!bookingService.validateUser(custom)){
-            return new ResponseEntity<>("No such user exist.", HttpStatus.BAD_REQUEST);
-        }
-        return buildingService.findByBuilding(custom);
+    @GetMapping("/findByLocation")
+    public ResponseEntity<String> findByLocation(@RequestBody Location location){
+        return bookingService.findByLocation(location);
     }
 }

@@ -81,4 +81,11 @@ public class Room {
     public void setSeatList(List<Seat> seatList) {
         this.seatList = seatList;
     }
+
+    public String toString1() {
+        return  ", buildingName='" + buildingName + '\'' +
+                ", floor=" + floor +
+                "roomNo=" + roomNo +
+                ", numberOfSeats=" + numberOfSeats;
+    }
 }

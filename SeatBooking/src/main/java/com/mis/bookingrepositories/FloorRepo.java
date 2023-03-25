@@ -12,4 +12,6 @@ public interface FloorRepo extends JpaRepository<Floor, Integer> {
 
     @Query(value = "select f from Floor f where f.building.buildingName=?1")
     List<Floor> findByBuilding(String buildingName);
+    @Query(value = "select f from Floor f where f.building.buildingName = ?1")
+    List<Floor> findAllFloors(String buildingName);
 }

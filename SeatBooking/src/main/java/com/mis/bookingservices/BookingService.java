@@ -1,9 +1,11 @@
 package com.mis.bookingservices;
 
+import com.mis.CustException.CustException;
 import com.mis.bookingmodels.Building;
 import com.mis.bookingmodels.User;
 import com.mis.bookingrepositories.BookingRepo;
 import com.mis.customclasses.Custom;
+import com.mis.customclasses.Location;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,13 +25,15 @@ public class BookingService {
         Optional<User> validUser = bookingRepo.validateUser(userId, userPassword);
         return validUser.isPresent();
     }
-    public ResponseEntity<String> findByLocation(Custom custom) {
-        if(!validateUser(custom)){
-            return new ResponseEntity<>("No such user exist.", HttpStatus.BAD_REQUEST);
-        }
-        List<Building> buildingList = bookingRepo.findAvailableSeatsAtLocation(custom.getBuildingLocation());
+    public ResponseEntity<String> findByLocation(Location custom) {
+        Optional<List<Building>> buildingLists = bookingRepo.findAvailableSeatsAtLocation(custom.getBuilding_location());
         StringBuilder buildings = new StringBuilder();
-        for(Building b : buildingList) buildings.append(b.toString1()).append("\n");
+        List<Building>buildingList = buildingLists.get();
+        if(buildingList.isEmpty())return new ResponseEntity<>("No Buildings Available at given Location", HttpStatus.NOT_FOUND);
+        for(Building b : buildingList){
+            buildings.append(b.toString1()).append("\n");
+            System.out.println(b);
+        }
         return new ResponseEntity<>(buildings.toString(),HttpStatus.FOUND);
     }
 }

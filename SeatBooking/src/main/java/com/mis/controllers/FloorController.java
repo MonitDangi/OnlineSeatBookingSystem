@@ -1,6 +1,8 @@
 package com.mis.controllers;
 
 import com.mis.CustException.CustException;
+import com.mis.bookingmodels.Building;
+import com.mis.bookingmodels.Floor;
 import com.mis.bookingmodels.User;
 import com.mis.bookingservices.BuildingService;
 import com.mis.bookingservices.FloorService;
@@ -8,13 +10,11 @@ import com.mis.bookingservices.UserService;
 import com.mis.customclasses.Custom;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/Floor")
 public class FloorController {
 
     private final FloorService floorService;
@@ -31,15 +31,26 @@ public class FloorController {
     @PostMapping("/addFloor")
     public ResponseEntity<String> addFloor(@RequestBody Custom custom) throws CustException {
         //verify user.
-        boolean valid = userService.verifyUser(custom.getUser());
-
+        if(!userService.verifyUser(custom.getUser()))throw new CustException("No Such User Exist");
         //verifyBuilding
-        buildingService.verifyBuilding(custom.getBuildingName());
-
-        //
-        floorService.addFloor(custom.getFloor());
-
+        if(!buildingService.verifyBuilding(custom.getBuildingName()))throw new CustException("No Such Building Exist");
+        Building b = buildingService.getBuilding(custom.getBuilding());
+        System.out.println(b);
+        Floor newf = new Floor(custom.getFloor().getFloorNo(), custom.getFloor().getFloorCapacity(),b);
+        System.out.println(newf);
+        floorService.addFloor(newf);
         return new ResponseEntity<>("Floor in corresponding Building Added successfully", HttpStatus.ACCEPTED);
-
+    }
+    @GetMapping("/findByFloor")
+    public ResponseEntity<String> findByFloor(Custom custom) throws CustException{
+        //verifyBuilding
+        if(!buildingService.verifyBuilding(custom.getBuildingName()))throw new CustException("No Such Building Exist");
+        List<Floor> floorList = floorService.listAllFloors(custom.getBuildingName());
+        StringBuilder floors = new StringBuilder();
+        floors.append("Floors Registered:\n");
+        for(Floor f: floorList){
+            floors.append(f.toString1()).append("\n");
+        }
+        return new ResponseEntity<>(floors.toString(), HttpStatus.FOUND);
     }
 }

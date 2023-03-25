@@ -47,12 +47,12 @@ public class BuildingService {
     }
 
     public boolean verifyBuilding(String buildingName) throws CustException {
-
         Optional<Building> opt = buildingRepo.findById(buildingName);
-        if(opt.isEmpty()){
-            throw new CustException("No such building found");
-        }
-        return true;
+        return opt.isPresent();
 
+    }
+
+    public Building getBuilding(Building building) {
+        return buildingRepo.findById(building.getBuildingName()).get();
     }
 }
