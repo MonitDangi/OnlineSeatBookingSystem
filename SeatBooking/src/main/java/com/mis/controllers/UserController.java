@@ -2,11 +2,9 @@ package com.mis.controllers;
 import com.mis.CustException.CustException;
 import com.mis.bookingmodels.User;
 import com.mis.bookingservices.UserService;
+import com.mis.customclasses.PassWord;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
@@ -31,10 +29,15 @@ public class UserController {
         else
             return "Invalid Id/Password";
     }
-    @PostMapping("/profileupdate")
-    public String profileupdate(@RequestBody User user)
+    @PostMapping("/forgotpassword")
+    public String forgotPassword(@RequestBody User user)throws CustException{
+        userService.forgotPassword(user);
+        return "We have sent a mail to your registered mail id";
+    }
+    @PostMapping("/resetPassword")
+    public String resetPassword(@RequestBody PassWord passWord)
     {
-        userService.updateprofile(user);
-        return "Updated Successfully";
+        userService.resetPwd(passWord);
+        return "Password Reset Successfully";
     }
 }
