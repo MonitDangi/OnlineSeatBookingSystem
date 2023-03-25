@@ -10,13 +10,12 @@ public class Seat {
     private Integer seatId;
     private Integer seatNo;
     private int floorNo;
-    private int roomNo;
 
-    public Seat(Integer seatNo, int floorNo, String buildingName, int roomNo) {
+    public Seat(Integer seatNo, int floorNo, String buildingName, Room room) {
         this.seatNo = seatNo;
         this.floorNo = floorNo;
         this.buildingName = buildingName;
-        this.roomNo = roomNo;
+        this.room = room;
     }
 
     private String buildingName;

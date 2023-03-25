@@ -1,5 +1,6 @@
 package com.mis.bookingrepositories;
 
+import com.mis.bookingmodels.Booking;
 import com.mis.bookingmodels.Building;
 import com.mis.bookingmodels.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface BookingRepo extends JpaRepository<BookingRepo, Long> {
+public interface BookingRepo extends JpaRepository<Booking, Long> {
     @Query(value = "select u from User u where u.userId = ?1 and u.password = ?2")
     Optional<User> validateUser(String userName, String userPassword);
     @Query(value = "select b from Building b where b.location = ?1")

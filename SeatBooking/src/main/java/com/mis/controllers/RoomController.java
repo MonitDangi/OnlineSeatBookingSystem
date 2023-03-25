@@ -27,6 +27,6 @@ public class RoomController {
         buildingService.verifyBuilding(custom.getBuildingName());
         floorService.verifyFloor(custom);
         Room r = new Room(custom.getRoom().getRoomNo(), custom.getBuildingName(), custom.getRoom().getNumberOfSeats(), custom.getFloor());
-        return roomService.addRoom(r);
+        return roomService.addRoom(custom);
     }
 }

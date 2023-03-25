@@ -15,12 +15,9 @@ public class FloorService {
     private final FloorRepo floorRepo;
     private final BuildingService buildingService;
 
-    private final FloorService floorService;
-
-    public FloorService(FloorRepo floorRepo, BuildingService buildingService, FloorService floorService) {
+    public FloorService(FloorRepo floorRepo, BuildingService buildingService) {
         this.floorRepo = floorRepo;
         this.buildingService = buildingService;
-        this.floorService = floorService;
     }
 
     public void addFloor(Floor floor) {
