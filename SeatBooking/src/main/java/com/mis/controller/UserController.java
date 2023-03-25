@@ -32,4 +32,10 @@ public class UserController {
         else
             return "Invalid Id/Password";
     }
+    @PostMapping("/profileupdate")
+    public String profileupdate(@RequestBody User user)
+    {
+        userService.updateprofile(user);
+        return "Updated Successfully";
+    }
 }

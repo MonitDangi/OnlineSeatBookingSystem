@@ -38,5 +38,12 @@ public class UserService {
         }
         return passwordEncoder.matches(user.getPassword(),temp.get().getPassword());
     }
-    
+
+    public void updateprofile(User user) {
+        Optional<User>temp=userRepo.findById(user.getUserId());
+        if(temp.isEmpty())
+        {
+            throw new CustException("")
+        }
+    }
 }
