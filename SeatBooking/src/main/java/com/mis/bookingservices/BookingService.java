@@ -27,7 +27,7 @@ public class BookingService {
         if(!validateUser(custom)){
             return new ResponseEntity<>("No such user exist.", HttpStatus.BAD_REQUEST);
         }
-        List<Building> buildingList = bookingRepo.findAvailableSeatsAtLocation(custom.getLocation());
+        List<Building> buildingList = bookingRepo.findAvailableSeatsAtLocation(custom.getBuildingLocation());
         StringBuilder buildings = new StringBuilder();
         for(Building b : buildingList) buildings.append(b.toString1()).append("\n");
         return new ResponseEntity<>(buildings.toString(),HttpStatus.FOUND);

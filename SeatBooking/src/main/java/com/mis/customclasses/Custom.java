@@ -82,4 +82,16 @@ public class Custom {
     public void setRoom(Room room) {
         this.room = room;
     }
+
+    public String getBuildingLocation() {
+        return building.getLocation();
+    }
+
+    public String getUserId() {
+        return user.getUserId();
+    }
+
+    public String getUserPassword() {
+        return user.getPassword();
+    }
 }
