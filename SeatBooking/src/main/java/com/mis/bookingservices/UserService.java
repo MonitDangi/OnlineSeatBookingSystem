@@ -59,17 +59,25 @@ protected String token;
         {
             throw new CustException("Invalid ID/Email");
         }
+        if(!user.getUserEmail().equals(temp.get().getUserEmail()))
+        {
+            throw new CustException("User Id and Email does not match");
+        }
        token=tokengenerate();
        emailSenderService.sendSimpleEmail(user.getUserEmail(), "Reset password request","This is your otp to reset your password "+token);
        token=passwordEncoder.encode(token);
     }
 
-    public void resetPwd(PassWord passWord) {
+    public void resetPwd(PassWord passWord) throws CustException {
         if(passwordEncoder.matches(passWord.getToken(),token ))
         {
-            String password=passWord.getUser().getPassword();
+            String password=passWord.getPassword();
             password=passwordEncoder.encode(password);
-            userRepo.updatepassword(password,passWord.getUser().getUserId());
+            userRepo.updatepassword(password,passWord.getUserid());
+        }
+        else
+        {
+            throw new CustException("Invalid OTP");
         }
     }
 }

@@ -32,11 +32,10 @@ public class UserController {
     @PostMapping("/forgotpassword")
     public String forgotPassword(@RequestBody User user)throws CustException{
         userService.forgotPassword(user);
-        return "We have sent a mail to your registered mail id";
+        return "We have sent a OTP(One Time Password) to your registered mail id";
     }
     @PostMapping("/resetPassword")
-    public String resetPassword(@RequestBody PassWord passWord)
-    {
+    public String resetPassword(@RequestBody PassWord passWord) throws CustException {
         userService.resetPwd(passWord);
         return "Password Reset Successfully";
     }
