@@ -1,12 +1,12 @@
-package com.mis.controller;
+package com.mis.controllers;
 
 import com.mis.CustException.CustException;
 import com.mis.bookingmodels.User;
-import com.mis.bookingrepositories.BuildingRepo;
 import com.mis.bookingservices.BuildingService;
 import com.mis.bookingservices.FloorService;
 import com.mis.bookingservices.UserService;
 import com.mis.customclasses.Custom;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,11 +35,12 @@ public class FloorController {
         User u1 = new User();
         u1.setUserId(custom.getUserId());
         u1.setPassword(custom.getUserPassword());
-        boolean valid = userService.valid(u1);
+        boolean valid = userService.verifyUser(u1);
 
         //verifyBuilding
         buildingService.verifyBuilding(custom.getBuildingName());
 
+        return new ResponseEntity<>("shdchdhc", HttpStatus.ACCEPTED);
 
     }
 }
