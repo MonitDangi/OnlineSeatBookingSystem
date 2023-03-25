@@ -1,10 +1,6 @@
 package com.mis.controllers;
 
 import com.mis.CustException.CustException;
-import com.mis.bookingmodels.Building;
-import com.mis.bookingmodels.User;
-import com.mis.bookingrepositories.BuildingRepo;
-import com.mis.bookingservices.BookingService;
 import com.mis.bookingservices.BuildingService;
 import com.mis.bookingservices.UserService;
 import com.mis.customclasses.Custom;

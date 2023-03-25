@@ -19,7 +19,6 @@ public class FloorController {
 
     private final FloorService floorService;
     private final UserService userService;
-
     private final BuildingService buildingService;
 
     public FloorController(FloorService floorService, UserService userService, BuildingService buildingService) {
@@ -32,15 +31,15 @@ public class FloorController {
     @PostMapping("/addFloor")
     public ResponseEntity<String> addFloor(@RequestBody Custom custom) throws CustException {
         //verify user.
-        User u1 = new User();
-        u1.setUserId(custom.getUserId());
-        u1.setPassword(custom.getUserPassword());
-        boolean valid = userService.verifyUser(u1);
+        boolean valid = userService.verifyUser(custom.getUser());
 
         //verifyBuilding
         buildingService.verifyBuilding(custom.getBuildingName());
 
-        return new ResponseEntity<>("shdchdhc", HttpStatus.ACCEPTED);
+        //
+        floorService.addFloor(custom.getFloor());
+
+        return new ResponseEntity<>("Floor in corresponding Building Added successfully", HttpStatus.ACCEPTED);
 
     }
 }
