@@ -1,5 +1,6 @@
 package com.mis.controllers;
 
+import com.mis.CustException.CustException;
 import com.mis.bookingservices.BookingService;
 import com.mis.bookingservices.BuildingService;
 import com.mis.customclasses.Custom;
@@ -22,7 +23,7 @@ public class BookingController {
         return bookingService.findByLocation(custom);
     }
     @RequestMapping("/findByBuilding")
-    public ResponseEntity<String> findByBuilding(Custom custom){
+    public ResponseEntity<String> findByBuilding(Custom custom) throws CustException {
         if(!bookingService.validateUser(custom)){
             return new ResponseEntity<>("No such user exist.", HttpStatus.BAD_REQUEST);
         }

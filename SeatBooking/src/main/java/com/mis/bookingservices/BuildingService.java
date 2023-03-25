@@ -23,9 +23,7 @@ public class BuildingService {
         this.buildingRepo =buildingRepo;
         this.floorRepo =floorRepo;
     }
-    public boolean validateBuilding(String buildingName){
-        return buildingRepo.validateBuilding(buildingName).isPresent();
-    }
+
 
     public void addBuilding(Building building) throws CustException {
         Optional<Building> opt = buildingRepo.findById(building.getBuildingName());
@@ -35,9 +33,9 @@ public class BuildingService {
         buildingRepo.save(building);
     }
 
-    public ResponseEntity<String> findByBuilding(Custom custom) {
+    public ResponseEntity<String> findByBuilding(Custom custom) throws CustException {
         String buildingName = custom.getBuildingName();
-        if(!validateBuilding(buildingName)){
+        if(!verifyBuilding(buildingName)){
             return new ResponseEntity<>("No such building Exist.", HttpStatus.BAD_REQUEST);
         }
         List<Floor> floorsList = floorRepo.findByBuilding(buildingName);
@@ -46,13 +44,13 @@ public class BuildingService {
         return new ResponseEntity<>(floors.toString(),HttpStatus.FOUND);
     }
 
-    public void verifyBuilding(String buildingName) throws CustException {
+    public boolean verifyBuilding(String buildingName) throws CustException {
 
         Optional<Building> opt = buildingRepo.findById(buildingName);
         if(opt.isEmpty()){
             throw new CustException("No such building found");
         }
 
-
+        return true;
     }
 }

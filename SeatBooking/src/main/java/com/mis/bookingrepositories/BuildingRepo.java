@@ -9,6 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface BuildingRepo extends JpaRepository<Building, String> {
-    @Query(value = "select b from Building  b where b.buildingName = ?1")
-    Optional<Building> validateBuilding(String buildingName);
+
 }
