@@ -8,6 +8,8 @@ import java.util.List;
 @Table(name = "floor")
 public class Floor {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Integer floorId;
     private Integer floorNo;
     private int floorCapacity;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

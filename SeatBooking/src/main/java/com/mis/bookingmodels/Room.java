@@ -8,16 +8,17 @@ import java.util.List;
 @Table(name = "room")
 public class Room {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private int roomId;
     private Integer roomNo;
     private String buildingName;
     private int numberOfSeats;
 
-    public Room(Integer roomNo, String buildingName, int numberOfSeats, Floor floor, List<Seat> seatList) {
+    public Room(Integer roomNo, String buildingName, int numberOfSeats, Floor floor) {
         this.roomNo = roomNo;
         this.buildingName = buildingName;
         this.numberOfSeats = numberOfSeats;
         this.floor = floor;
-        this.seatList = seatList;
     }
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

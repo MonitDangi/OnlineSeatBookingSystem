@@ -3,21 +3,20 @@ package com.mis.bookingmodels;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Seat")
+@Table(name = "seat_table")
 public class Seat {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Integer seatId;
     private Integer seatNo;
     private int floorNo;
+    private int roomNo;
 
-    public Seat(Integer seatNo, int floorNo, String buildingName, String startDate, String startTime, String endTime, String endDate, Room room) {
+    public Seat(Integer seatNo, int floorNo, String buildingName, int roomNo) {
         this.seatNo = seatNo;
         this.floorNo = floorNo;
         this.buildingName = buildingName;
-        this.startDate = startDate;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.endDate = endDate;
-        this.room = room;
+        this.roomNo = roomNo;
     }
 
     private String buildingName;
