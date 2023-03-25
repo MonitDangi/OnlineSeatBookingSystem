@@ -10,7 +10,13 @@ public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long bookingId;
-
+    private String startDate;
+    private String endDate;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "userId")
+    User userinfo;
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    List<Building>buildingList;
     @Override
     public String toString() {
         return "Booking{" +
@@ -21,11 +27,6 @@ public class Booking {
                 ", buildingList=" + buildingList +
                 '}';
     }
-
-    public Booking() {
-
-    }
-
     public Long getBookingId() {
         return bookingId;
     }
@@ -73,12 +74,7 @@ public class Booking {
     public void setBuildingList(List<Building> buildingList) {
         this.buildingList = buildingList;
     }
+    public Booking() {
 
-    private String startDate;
-    private String endDate;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "userId")
-    User userinfo;
-    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    List<Building>buildingList;
+    }
 }
