@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface SeatRepo extends JpaRepository<Seat, Long> {
-    @Query(value = "select s from Seat s where s.room.roomNo = ?1 and s.floorNo = ?2 and s.buildingName = ?3")
-    Optional<List<Seat>> getAllSeats(Integer roomNo, Integer floorNo, String buildingName);
+public interface SeatRepo extends JpaRepository<Seat, Integer> {
+    @Query(value = "select s from Seat s where s.floorNo=?1")
+    Optional<List<Seat>> getAllSeats(Integer floorNo);
 }

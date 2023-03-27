@@ -36,11 +36,10 @@ public class RoomController {
     }
     @GetMapping("/listAllRooms")
     public ResponseEntity<String> ListAllRooms(@RequestBody Custom custom) throws CustException {
-        custom.getFloor().setBuilding(custom.getBuilding());
         userService.verifyUser(custom.getUser());
-        buildingService.verifyBuilding(custom.getBuildingName());
+        buildingService.verifyBuilding(custom.getBuilding().getBuildingName());
         floorService.verifyFloor(custom);
-        List<Room> roomList =  roomService.getAllRooms(custom.getBuildingName(), custom.getFloor().getFloorNo());
+        List<Room> roomList =  roomService.getAllRooms(custom.getBuilding().getBuildingName(), custom.getFloor().getFloorNo());
         StringBuilder rooms =  new StringBuilder();
         rooms.append("Rooms Available:-\n");
         for(Room r: roomList){

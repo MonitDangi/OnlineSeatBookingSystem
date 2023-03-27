@@ -22,7 +22,7 @@ public class SeatController {
         this.seatService = seatService;
     }
 
-    @GetMapping("listAllSeats")
+    @GetMapping("/listAllSeats")
     public ResponseEntity<String> listAllSeats(@RequestBody Custom custom)throws CustException {
         System.out.println(custom);
        roomService.validateRoom(custom);

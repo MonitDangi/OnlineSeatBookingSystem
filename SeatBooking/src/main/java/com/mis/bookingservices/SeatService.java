@@ -30,11 +30,11 @@ public class SeatService {
         System.out.println(custom.getRoom().getRoomNo());
         System.out.println(custom.getFloor().getFloorNo());
         System.out.println(custom.getBuilding().getBuildingName());
-        Optional<List<Seat>> seatList =  seatRepo.getAllSeats(custom.getRoom().getRoomNo(), custom.getFloor().getFloorNo(), custom.getBuilding().getBuildingName());
-        if(seatList.isEmpty()) System.out.println("Seat list is Empty");
+        int fNo = custom.getFloor().getFloorNo();
+
+        List<Seat> seats =  seatRepo.getAllSeats(fNo).get();
+        if(seats.isEmpty()) System.out.println("Seat list is Empty");
         StringBuilder str = new StringBuilder();
-        List<Seat>seats = seatList.get();
-        System.out.println("Seats:" + seats);
         for(Seat s:seats){
             str.append(s.toString1()).append("\n");
         }

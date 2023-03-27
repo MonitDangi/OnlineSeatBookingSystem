@@ -9,7 +9,7 @@ import java.util.List;
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int roomId;
+    private Integer roomId;
     private Integer roomNo;
     private String buildingName;
     private int numberOfSeats;

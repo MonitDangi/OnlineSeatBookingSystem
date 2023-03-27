@@ -72,7 +72,6 @@ public class Seat {
                 return "seatNo=" + seatNo +
                 ", floorNo=" + floorNo +
                 ", buildingName='" + buildingName + '\'' +
-                ", room=" + room +
                 ".";
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 public class Floor {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer floorId;
+    private Long floorId;
     private Integer floorNo;
     private int floorCapacity;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -74,7 +74,7 @@ public class Floor {
         this.roomList = roomList;
     }
 
-    public Integer getFloorId() {
+    public Long getFloorId() {
         return floorId;
     }
 }
