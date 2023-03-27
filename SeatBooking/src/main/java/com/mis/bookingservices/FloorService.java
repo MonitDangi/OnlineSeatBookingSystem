@@ -4,6 +4,9 @@ import com.mis.CustException.CustException;
 import com.mis.bookingmodels.Floor;
 import com.mis.bookingrepositories.FloorRepo;
 import com.mis.customclasses.Custom;
+import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLOutput;
@@ -44,4 +47,5 @@ public class FloorService {
         Optional<Floor> opt1 = floorRepo.findFloor(custom.getFloor().getFloorNo(), custom.getBuilding().getBuildingName());
         return opt1.get();
     }
+
 }

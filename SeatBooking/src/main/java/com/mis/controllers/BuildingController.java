@@ -26,7 +26,10 @@ public class BuildingController {
     @PostMapping("/addBuilding")
     public ResponseEntity<String> addBuilding(@RequestBody Custom custom) throws CustException {
         //verifyUser
-        userService.verifyUser(custom.getUser());
+        if(!userService.verifyUser(custom.getUser()))
+        {
+            return new ResponseEntity<>("Invalid Password",HttpStatus.FORBIDDEN);
+        }
 
         //user verified, now adding building
 
@@ -35,8 +38,8 @@ public class BuildingController {
         return new ResponseEntity<>("Bravo...you added a new building",HttpStatus.ACCEPTED);
     }
     @GetMapping("/findByBuilding")
-    public ResponseEntity<String> findByBuilding(Custom custom) throws CustException {
-        if(!bookingService.validateUser(custom)){
+    public ResponseEntity<String> findByBuilding(@RequestBody Custom custom) throws CustException {
+        if(!userService.verifyUser(custom.getUser())){
             return new ResponseEntity<>("No such user exist.", HttpStatus.BAD_REQUEST);
         }
         return buildingService.findByBuilding(custom);

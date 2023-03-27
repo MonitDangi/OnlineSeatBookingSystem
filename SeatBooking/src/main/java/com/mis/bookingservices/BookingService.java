@@ -33,12 +33,7 @@ public class BookingService {
         this.userRepo = userRepo;
         this.userService = userService;
     }
-    public boolean validateUser(Custom custom){
-        String userId = custom.getUserId();
-        String userPassword = custom.getUserPassword();
-        Optional<User> validUser = bookingRepo.validateUser(userId, userPassword);
-        return validUser.isPresent();
-    }
+
     public ResponseEntity<String> findByLocation(Location custom) {
         Optional<List<Building>> buildingLists = bookingRepo.findAvailableSeatsAtLocation(custom.getBuilding_location());
         StringBuilder buildings = new StringBuilder();

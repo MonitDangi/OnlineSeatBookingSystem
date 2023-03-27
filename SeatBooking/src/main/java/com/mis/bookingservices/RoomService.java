@@ -4,6 +4,7 @@ import com.mis.CustException.CustException;
 import com.mis.bookingmodels.Floor;
 import com.mis.bookingmodels.Room;
 import com.mis.bookingmodels.Seat;
+import com.mis.bookingrepositories.FloorRepo;
 import com.mis.bookingrepositories.RoomRepo;
 import com.mis.customclasses.Custom;
 import org.springframework.http.HttpStatus;
@@ -18,10 +19,12 @@ public class RoomService {
     private final RoomRepo roomRepo;
     private final SeatService seatService;
     private final FloorService floorService;
-    public RoomService(RoomRepo roomRepo, SeatService seatService,  FloorService floorService) {
+    private final FloorRepo floorRepo;
+    public RoomService(RoomRepo roomRepo, SeatService seatService, FloorService floorService, FloorRepo floorRepo) {
         this.roomRepo = roomRepo;
         this.seatService = seatService;
         this.floorService = floorService;
+        this.floorRepo = floorRepo;
     }
 
     public boolean checkRoom(Room room, int floorNo) {
@@ -34,9 +37,10 @@ public class RoomService {
         Floor f = floorService.getFloor(custom);
         Room r = new Room(custom.getRoom().getRoomNo(), custom.getBuildingName(), custom.getRoom().getNumberOfSeats(), f);
         roomRepo.save(r);
-        System.out.println(room.getRoomNo());
         Room r1 = roomRepo.getRoom(custom.getBuildingName(), f.getFloorNo(), room.getRoomNo()).get();
         int roomCapacity = room.getNumberOfSeats();
+        System.out.println("Floor debug "+custom.getFloor().getFloorNo()+" "+roomCapacity+" "+custom.getBuilding().getBuildingName());
+        floorRepo.updatecapacity(custom.getFloor().getFloorNo(),roomCapacity,custom.getBuilding().getBuildingName());
         for(int i = 0; i < roomCapacity; i++){
             Seat s = new Seat(i+1,f.getFloorNo(), custom.getBuildingName(), r1);
             seatService.addSeat(s);
