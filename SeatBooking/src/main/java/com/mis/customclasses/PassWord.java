@@ -1,9 +1,6 @@
 package com.mis.customclasses;
-
-import com.mis.bookingmodels.User;
-
 public class PassWord {
-    private String userid;
+    private String userId;
 
     private String token;
     private String password;
@@ -16,12 +13,12 @@ public class PassWord {
         this.password = password;
     }
 
-    public String getUserid() {
-        return userid;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUserid(String userid) {
-        this.userid = userid;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getToken() {

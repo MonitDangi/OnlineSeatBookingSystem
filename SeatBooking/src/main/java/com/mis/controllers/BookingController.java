@@ -6,7 +6,6 @@ import com.mis.bookingservices.BuildingService;
 import com.mis.customclasses.Custom;
 import com.mis.customclasses.Location;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +26,7 @@ public class BookingController {
     }
     @PostMapping("/bookseat")
     public ResponseEntity<String> bookseat(@RequestBody Custom custom) throws CustException{
+        System.out.println(custom.toString());
         bookingService.bookseat(custom);
         return new ResponseEntity<>("Seat Booked Successfully and a mail regarding the same has been sent to you registered mail id", HttpStatus.ACCEPTED);
     }

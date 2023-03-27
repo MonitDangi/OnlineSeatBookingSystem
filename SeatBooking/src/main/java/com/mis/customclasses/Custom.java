@@ -97,7 +97,6 @@ public class Custom {
                 ", booking=" + booking +
                 ", building=" + building +
                 ", floor=" + floor +
-                ", room=" + room +
                 '}';
     }
 }

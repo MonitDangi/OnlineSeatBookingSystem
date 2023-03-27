@@ -65,12 +65,15 @@ public class BookingService {
             throw  new CustException("Invalid Building Details");
         }
         List<Floor>floors=building.get().getFloorList();
+        System.out.println(floors.size());
+        Floor tempfloor=new Floor();
         boolean b=false;
         for(Floor obj:floors)
         {
             if(obj.getFloorNo()==custom.getFloor().getFloorNo())
             {
                 b=true;
+                tempfloor.setRoomList(obj.getRoomList());
                 break;
             }
         }
@@ -78,13 +81,15 @@ public class BookingService {
         {
             throw new CustException("Invalid Floor no");
         }
-        List<Room>roomList=floors.get(custom.getFloor().getFloorNo()).getRoomList();
+        List<Room>roomList=tempfloor.getRoomList();
         b=false;
+        Room temproom=new Room();
         for(Room obj:roomList)
         {
             if(obj.getRoomNo()==custom.getRoom().getRoomNo())
             {
                 b=true;
+                temproom.setSeatList(obj.getSeatList());
                 break;
             }
         }
@@ -92,7 +97,7 @@ public class BookingService {
         {
             throw new CustException("Invalid Room Details");
         }
-        List<Seat>seats=roomList.get(custom.getRoom().getRoomNo()).getSeatList();
+        List<Seat>seats=temproom.getSeatList();
         b=false;
         for(Seat obj:seats)
         {
