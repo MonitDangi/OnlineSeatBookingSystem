@@ -65,17 +65,44 @@ public class BookingService {
             throw  new CustException("Invalid Building Details");
         }
         List<Floor>floors=building.get().getFloorList();
-        if(!floors.contains(custom.getFloor().getFloorNo()))
+        boolean b=false;
+        for(Floor obj:floors)
+        {
+            if(obj.getFloorNo()==custom.getFloor().getFloorNo())
+            {
+                b=true;
+                break;
+            }
+        }
+        if(!b)
         {
             throw new CustException("Invalid Floor no");
         }
         List<Room>roomList=floors.get(custom.getFloor().getFloorNo()).getRoomList();
-        if(!roomList.contains(custom.getRoom().getRoomNo()))
+        b=false;
+        for(Room obj:roomList)
+        {
+            if(obj.getRoomNo()==custom.getRoom().getRoomNo())
+            {
+                b=true;
+                break;
+            }
+        }
+        if(!b)
         {
             throw new CustException("Invalid Room Details");
         }
         List<Seat>seats=roomList.get(custom.getRoom().getRoomNo()).getSeatList();
-        if(!seats.contains(custom.getSeat().getSeatNo()))
+        b=false;
+        for(Seat obj:seats)
+        {
+            if(obj.getSeatNo()==custom.getSeat().getSeatNo())
+            {
+                b=true;
+                break;
+            }
+        }
+        if(!b)
         {
             throw new CustException("Invalid seat no");
         }

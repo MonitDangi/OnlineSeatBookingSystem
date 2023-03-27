@@ -35,7 +35,7 @@ public class UserController {
         userService.forgotPassword(user);
         return "We have sent a OTP(One Time Password) to your registered mail id";
     }
-    @PostMapping("/resetPassword")
+    @PutMapping("/resetPassword")
     public String resetPassword(@RequestBody PassWord passWord) throws CustException {
         userService.resetPwd(passWord);
         return "Password Reset Successfully";

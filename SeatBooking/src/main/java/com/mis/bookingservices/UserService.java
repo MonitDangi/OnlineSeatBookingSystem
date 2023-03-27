@@ -73,6 +73,7 @@ protected String token;
         {
            passWord.setPassword(this.passwordEncoder.encode(passWord.getPassword()));
             userRepo.updatepassword(passWord.getPassword(),passWord.getUserid());
+            token="";
         }
         else
         {
