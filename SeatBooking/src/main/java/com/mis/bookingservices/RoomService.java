@@ -26,14 +26,17 @@ public class RoomService {
 
     public boolean checkRoom(Room room, int floorNo) {
         Optional<Room> exist = roomRepo.checkRoom(room.getRoomNo(), floorNo, room.getBuildingName());
+        if(exist.isPresent()) System.out.println("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
         return exist.isPresent();
     }
     public ResponseEntity<String> addRoom(Custom custom){
+        System.out.println(custom);
         Room room = custom.getRoom();
         if(checkRoom(room, custom.getFloor().getFloorNo()))return new ResponseEntity<>("Room Already Exist.", HttpStatus.ALREADY_REPORTED);
         Floor f = floorService.getFloor(custom);
         Room r = new Room(custom.getRoom().getRoomNo(), custom.getBuildingName(), custom.getRoom().getNumberOfSeats(), f);
         roomRepo.save(r);
+        floorService.updateCapacity(custom.getBuildingName(), f.getFloorNo(), r.getNumberOfSeats());
         System.out.println(room.getRoomNo());
         Room r1 = roomRepo.getRoom(custom.getBuildingName(), f.getFloorNo(), room.getRoomNo()).get();
         int roomCapacity = room.getNumberOfSeats();

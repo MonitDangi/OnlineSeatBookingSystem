@@ -6,7 +6,6 @@ import com.mis.bookingrepositories.FloorRepo;
 import com.mis.customclasses.Custom;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,5 +42,9 @@ public class FloorService {
     public Floor getFloor(Custom custom) {
         Optional<Floor> opt1 = floorRepo.findFloor(custom.getFloor().getFloorNo(), custom.getBuilding().getBuildingName());
         return opt1.get();
+    }
+
+    public void updateCapacity(String buildingName, Integer floorNo, int numberOfSeats) {
+        floorRepo.updateCapacity(buildingName, floorNo, numberOfSeats);
     }
 }
