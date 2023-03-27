@@ -21,6 +21,6 @@ public interface FloorRepo extends JpaRepository<Floor, Integer> {
     Optional<Floor> findFloor(Integer floorNo, String buildingName);
     @Modifying
     @Transactional
-    @Query(value = "update Floor u set u.floorCapacity=u.floorCapacity+?2 where u.floorNo=?1 and u.building.buildingName=?3 ")
-    public void updatecapacity(Integer floorNo, int numberOfSeats, String buildingName);
+    @Query(value = "update Floor f set f.floorCapacity = f.floorCapacity+?3 where f.floorNo = ?2 and f.building.buildingName= ?1")
+    void updateCapacity(String buildingName, Integer floorNo, int numberOfSeats);
 }

@@ -4,7 +4,6 @@ import com.mis.CustException.CustException;
 import com.mis.bookingmodels.Floor;
 import com.mis.bookingmodels.Room;
 import com.mis.bookingmodels.Seat;
-import com.mis.bookingrepositories.FloorRepo;
 import com.mis.bookingrepositories.RoomRepo;
 import com.mis.customclasses.Custom;
 import org.springframework.http.HttpStatus;
@@ -19,28 +18,27 @@ public class RoomService {
     private final RoomRepo roomRepo;
     private final SeatService seatService;
     private final FloorService floorService;
-    private final FloorRepo floorRepo;
-    public RoomService(RoomRepo roomRepo, SeatService seatService, FloorService floorService, FloorRepo floorRepo) {
+    public RoomService(RoomRepo roomRepo, SeatService seatService,  FloorService floorService) {
         this.roomRepo = roomRepo;
         this.seatService = seatService;
         this.floorService = floorService;
-        this.floorRepo = floorRepo;
     }
 
-    public boolean checkRoom(Room room, int floorNo) {
-        Optional<Room> exist = roomRepo.checkRoom(room.getRoomNo(), floorNo, room.getBuildingName());
+    public boolean checkRoom(Room room, int floorNo, String buildingName) {
+        Optional<Room> exist = roomRepo.checkRoom(room.getRoomNo(), floorNo, buildingName);
         return exist.isPresent();
     }
     public ResponseEntity<String> addRoom(Custom custom){
         Room room = custom.getRoom();
-        if(checkRoom(room, custom.getFloor().getFloorNo()))return new ResponseEntity<>("Room Already Exist.", HttpStatus.ALREADY_REPORTED);
+        System.out.println(room.getRoomNo()+"  "+custom.getFloor().getFloorNo()+"  "+custom.getBuilding().getBuildingName());
+        if(checkRoom(room, custom.getFloor().getFloorNo(),custom.getBuilding().getBuildingName()))return new ResponseEntity<>("Room Already Exist.", HttpStatus.ALREADY_REPORTED);
         Floor f = floorService.getFloor(custom);
         Room r = new Room(custom.getRoom().getRoomNo(), custom.getBuildingName(), custom.getRoom().getNumberOfSeats(), f);
+        System.out.println(r.toString1());
         roomRepo.save(r);
+        floorService.updateCapacity(custom.getBuildingName(), f.getFloorNo(), r.getNumberOfSeats());
         Room r1 = roomRepo.getRoom(custom.getBuildingName(), f.getFloorNo(), room.getRoomNo()).get();
         int roomCapacity = room.getNumberOfSeats();
-        System.out.println("Floor debug "+custom.getFloor().getFloorNo()+" "+roomCapacity+" "+custom.getBuilding().getBuildingName());
-        floorRepo.updatecapacity(custom.getFloor().getFloorNo(),roomCapacity,custom.getBuilding().getBuildingName());
         for(int i = 0; i < roomCapacity; i++){
             Seat s = new Seat(i+1,f.getFloorNo(), custom.getBuildingName(), r1);
             seatService.addSeat(s);

@@ -4,12 +4,8 @@ import com.mis.CustException.CustException;
 import com.mis.bookingmodels.Floor;
 import com.mis.bookingrepositories.FloorRepo;
 import com.mis.customclasses.Custom;
-import jakarta.transaction.Transactional;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,4 +44,7 @@ public class FloorService {
         return opt1.get();
     }
 
+    public void updateCapacity(String buildingName, Integer floorNo, int numberOfSeats) {
+        floorRepo.updateCapacity(buildingName, floorNo, numberOfSeats);
+    }
 }
