@@ -33,6 +33,7 @@ public class FloorService {
         if(opt1.isEmpty()){
             throw new CustException("No mentioned floor available");
         }
+        System.out.println("Building validated");
         return true;
     }
 

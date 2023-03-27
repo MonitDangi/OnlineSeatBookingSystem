@@ -17,6 +17,8 @@ public class Booking {
     User userinfo;
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     List<Building>buildingList;
+    private String startTime;
+    private String endTime;
     @Override
     public String toString() {
         return "Booking{" +

@@ -19,10 +19,6 @@ public class Seat {
     }
 
     private String buildingName;
-    private String startDate;
-    private String startTime;
-    private String endTime;
-    private String endDate;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "roomNo")
     Room room;
@@ -37,10 +33,6 @@ public class Seat {
                 "seatNo=" + seatNo +
                 ", floorNo=" + floorNo +
                 ", buildingName='" + buildingName + '\'' +
-                ", startDate='" + startDate + '\'' +
-                ", startTime='" + startTime + '\'' +
-                ", endTime='" + endTime + '\'' +
-                ", endDate='" + endDate + '\'' +
                 ", room=" + room +
                 '}';
     }
@@ -68,44 +60,19 @@ public class Seat {
     public void setBuildingName(String buildingName) {
         this.buildingName = buildingName;
     }
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
     public Room getRoom() {
         return room;
     }
 
     public void setRoom(Room room) {
         this.room = room;
+    }
+
+    public String toString1() {
+                return "seatNo=" + seatNo +
+                ", floorNo=" + floorNo +
+                ", buildingName='" + buildingName + '\'' +
+                ", room=" + room +
+                ".";
     }
 }

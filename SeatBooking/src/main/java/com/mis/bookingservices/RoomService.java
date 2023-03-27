@@ -1,5 +1,6 @@
 package com.mis.bookingservices;
 
+import com.mis.CustException.CustException;
 import com.mis.bookingmodels.Floor;
 import com.mis.bookingmodels.Room;
 import com.mis.bookingmodels.Seat;
@@ -46,5 +47,15 @@ public class RoomService {
 
     public List<Room> getAllRooms(String buildingName, int floorNo) {
         return roomRepo.getAllRooms(buildingName, floorNo);
+    }
+    public boolean validateRoom(Custom custom)throws CustException {
+        if(!floorService.verifyFloor(custom)){
+            throw new CustException("No such floor exist.");
+        }
+        System.out.println("Floor Validated.");
+        if(roomRepo.validateRoom(custom.getRoom().getRoomNo(), custom.getFloor().getFloorNo(), custom.getBuilding().getBuildingName()).isEmpty()){
+            throw new CustException("No such room exist");
+        }
+        return true;
     }
 }

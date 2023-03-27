@@ -73,4 +73,8 @@ public class Floor {
     public void setRoomList(List<Room> roomList) {
         this.roomList = roomList;
     }
+
+    public Integer getFloorId() {
+        return floorId;
+    }
 }
