@@ -71,9 +71,8 @@ protected String token;
     public void resetPwd(PassWord passWord) throws CustException {
         if(passwordEncoder.matches(passWord.getToken(),token ))
         {
-            String password=passWord.getPassword();
-            password=passwordEncoder.encode(password);
-            userRepo.updatepassword(password,passWord.getUserid());
+           passWord.setPassword(this.passwordEncoder.encode(passWord.getPassword()));
+            userRepo.updatepassword(passWord.getPassword(),passWord.getUserid());
         }
         else
         {
