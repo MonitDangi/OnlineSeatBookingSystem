@@ -50,9 +50,9 @@ public class BookingService {
 
         if(!userService.verifyUser(custom.getUser()))
         {
-            throw new CustException("Invalid User Details");
+            throw new CustException("Invalid ID/Password");
         }
-            Optional<User> user=userRepo.findById(custom.getUser().getUserId());
+        Optional<User> user=userRepo.findById(custom.getUser().getUserId());
         User user1=user.get();
         Optional<Building>building=buildingRepo.findById(custom.getBuildingName());
         if(building.isEmpty())
@@ -60,7 +60,6 @@ public class BookingService {
             throw  new CustException("Invalid Building Details");
         }
         List<Floor>floors=building.get().getFloorList();
-        System.out.println(floors.size());
         Floor tempfloor=new Floor();
         boolean b=false;
         for(Floor obj:floors)
@@ -110,13 +109,13 @@ public class BookingService {
         String date2=custom.getBooking().getEndDate();
         Integer seatId=seatRepo.findId(custom.getSeat().getSeatNo(),custom.getFloor().getFloorNo(),custom.getBuilding().getBuildingName(),custom.getRoom().getRoomNo());
         List<Booking>bookingList=bookingRepo.getBookinglist1(custom.getBuilding().getBuildingName(),date1,date2,seatId);
-
         if(bookingList.isEmpty()) {
-            bookingRepo.save(custom.getBooking());
+            Booking b1 = new Booking(custom.getBooking().getStartDate(),custom.getBooking().getEndDate(),custom.getBooking().getStartTime(),custom.getBooking().getEndTime(),user1,custom.getBuilding().getBuildingName(),seatId);
+            bookingRepo.save(b1);
         }
         for(Booking obj:bookingList)
         {
-           if((obj.getStartTime().compareTo(custom.getBooking().getEndTime())>0)&&(obj.getEndTime().compareTo(custom.getBooking().getStartTime())>0))
+           if((obj.getStartDate().compareTo(custom.getBooking().getEndDate())<0)&&(obj.getStartTime().compareTo(custom.getBooking().getEndTime())<0)&&(obj.getEndTime().compareTo(custom.getBooking().getStartTime())>0)&&(obj.getEndDate().compareTo(custom.getBooking().getStartDate())>0))
            {
                throw new CustException("Seat already booked");
            }
@@ -124,7 +123,7 @@ public class BookingService {
            {
                Booking b1 = new Booking(custom.getBooking().getStartDate(),custom.getBooking().getEndDate(),custom.getBooking().getStartTime(),custom.getBooking().getEndTime(),user1,custom.getBuilding().getBuildingName(),seatId);
                bookingRepo.save(b1);
-               emailSenderService.sendSimpleEmail(user1.getUserEmail(), "Booking Details","This is to inform you that you have booked a seat with following details "+b1.toString());
+               emailSenderService.sendSimpleEmail(user1.getUserEmail(), "Booking Details","This is to inform you that you have booked a seat with following details "+b1.toString()+"\n * Seat No : "+custom.getSeat().getSeatNo()+"\n * Floor No : "+custom.getFloor().getFloorNo()+"\n * Room No : "+custom.getRoom().getRoomNo()+"\n\n\n\n In case of any query reach out to our customer care service"+"\n Email : onlineseatbookingsystem@gmail.com");
                break;
            }
         }

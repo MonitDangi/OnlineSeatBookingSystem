@@ -33,14 +33,14 @@ public class Booking {
 
     @Override
     public String toString() {
-        return "Booking{" +
-                "bookingId=" + bookingId +
-                ", startDate='" + startDate + '\'' +
-                ", endDate='" + endDate + '\'' +
-                ", buildingName='" + buildingName + '\'' +
-                ", startTime='" + startTime + '\'' +
-                ", endTime='" + endTime + '\'' +
-                '}';
+        return "\n\n\n Booking Details" +
+                "\n * BookingId : " + bookingId +
+                "\n * StartDate : " + startDate +
+                "\n * EndDate : " + endDate +
+                "\n * BuildingName : " + buildingName +
+                "\n * StartTime : " + startTime +
+                "\n * EndTime : " + endTime
+                ;
     }
     public String getStartTime() {
         return startTime;
