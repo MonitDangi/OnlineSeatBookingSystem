@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class FloorController {
@@ -34,10 +35,10 @@ public class FloorController {
         if(!userService.verifyUser(custom.getUser()))throw new CustException("No Such User Exist");
         //verifyBuilding
         if(!buildingService.verifyBuilding(custom.getBuildingName()))throw new CustException("No Such Building Exist");
+        Floor fl =  floorService.getFloor(custom);
+        if(fl != null)throw new CustException("Floor already Exist");
         Building b = buildingService.getBuilding(custom.getBuilding());
-        System.out.println(b);
         Floor newf = new Floor(custom.getFloor().getFloorNo(), custom.getFloor().getFloorCapacity(),b);
-        System.out.println(newf);
         floorService.addFloor(newf);
         return new ResponseEntity<>("Floor in corresponding Building Added successfully", HttpStatus.ACCEPTED);
     }

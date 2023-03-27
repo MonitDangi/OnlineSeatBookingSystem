@@ -16,10 +16,6 @@ public class Building {
         this.location = location;
         this.totalCapacity = totalCapacity;
     }
-
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "bookingId")
-    Booking booking;
     @OneToMany(mappedBy = "building", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     List<Floor>floorList;
 
@@ -51,13 +47,6 @@ public class Building {
         this.totalCapacity = totalCapacity;
     }
 
-    public Booking getBooking() {
-        return booking;
-    }
-
-    public void setBooking(Booking booking) {
-        this.booking = booking;
-    }
 
     public List<Floor> getFloorList() {
         return floorList;
@@ -73,7 +62,6 @@ public class Building {
                 "buildingName='" + buildingName + '\'' +
                 ", location='" + location + '\'' +
                 ", totalCapacity=" + totalCapacity +
-                ", booking=" + booking +
                 ", floorList=" + floorList +
                 '}';
     }

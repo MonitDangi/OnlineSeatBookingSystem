@@ -90,4 +90,8 @@ public class BuildingService {
         }
         buildingRepo.delete(building);
     }
+
+    public void updateCapacity(String buildingName, int numberOfSeats) {
+        buildingRepo.updateCapacity(buildingName, numberOfSeats);
+    }
 }

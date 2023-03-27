@@ -17,8 +17,6 @@ public class Booking {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "userId")
     User userinfo;
-    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    List<Building>buildingList;
     private String startTime;
     private String endTime;
     private Integer seatId;
@@ -108,13 +106,6 @@ public class Booking {
         this.userinfo = userinfo;
     }
 
-    public List<Building> getBuildingList() {
-        return buildingList;
-    }
-
-    public void setBuildingList(List<Building> buildingList) {
-        this.buildingList = buildingList;
-    }
     public Booking() {
 
     }

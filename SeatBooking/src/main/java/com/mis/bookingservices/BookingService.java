@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Book;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +38,8 @@ public class BookingService {
     public ResponseEntity<String> findByLocation(Location custom) {
         Optional<List<Building>> buildingLists = bookingRepo.findAvailableSeatsAtLocation(custom.getBuilding_location());
         StringBuilder buildings = new StringBuilder();
-        List<Building>buildingList = buildingLists.get();
+        List<Building>buildingList = new ArrayList<>();
+        if(buildingLists.isPresent())buildingList = buildingLists.get();
         if(buildingList.isEmpty())return new ResponseEntity<>("No Buildings Available at given Location", HttpStatus.NOT_FOUND);
         for(Building b : buildingList){
             buildings.append(b.toString1()).append("\n");
@@ -45,6 +47,9 @@ public class BookingService {
         }
         return new ResponseEntity<>(buildings.toString(),HttpStatus.FOUND);
     }
+//    public ResponseEntity<String> listAllSeatsForTime(Custom custom){
+//        List<Booking>bookedSeats =
+//    }
 
     public void bookseat(Custom custom) throws CustException {
 
@@ -95,7 +100,7 @@ public class BookingService {
         b=false;
         for(Seat obj:seats)
         {
-            if(obj.getSeatNo()==custom.getSeat().getSeatNo())
+            if(obj.getSeatNo() == custom.getSeat().getSeatNo())
             {
                 b=true;
                 break;
@@ -123,7 +128,7 @@ public class BookingService {
            {
                Booking b1 = new Booking(custom.getBooking().getStartDate(),custom.getBooking().getEndDate(),custom.getBooking().getStartTime(),custom.getBooking().getEndTime(),user1,custom.getBuilding().getBuildingName(),seatId);
                bookingRepo.save(b1);
-               emailSenderService.sendSimpleEmail(user1.getUserEmail(), "Booking Details","This is to inform you that you have booked a seat with following details "+b1.toString()+"\n * Seat No : "+custom.getSeat().getSeatNo()+"\n * Floor No : "+custom.getFloor().getFloorNo()+"\n * Room No : "+custom.getRoom().getRoomNo()+"\n\n\n\n In case of any query reach out to our customer care service"+"\n Email : onlineseatbookingsystem@gmail.com");
+               emailSenderService.sendSimpleEmail(user1.getUserEmail(), "Booking Details","This is to inform you that you have booked a seat with following details "+b1+"\n * Seat No : "+custom.getSeat().getSeatNo()+"\n * Floor No : "+custom.getFloor().getFloorNo()+"\n * Room No : "+custom.getRoom().getRoomNo()+"\n\n\n\n In case of any query reach out to our customer care service"+"\n Email : onlineseatbookingsystem@gmail.com");
                break;
            }
         }

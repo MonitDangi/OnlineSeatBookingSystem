@@ -24,9 +24,7 @@ public class SeatController {
 
     @GetMapping("/listAllSeats")
     public ResponseEntity<String> listAllSeats(@RequestBody Custom custom)throws CustException {
-        System.out.println(custom);
        roomService.validateRoom(custom);
-        System.out.println("Room Validated");
        return seatService.listAllSeats(custom);
     }
 }
