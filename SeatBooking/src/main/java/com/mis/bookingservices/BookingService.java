@@ -1,23 +1,37 @@
 package com.mis.bookingservices;
 
 import com.mis.CustException.CustException;
-import com.mis.bookingmodels.Building;
-import com.mis.bookingmodels.User;
+import com.mis.EmailService.EmailSenderService;
+import com.mis.bookingmodels.*;
 import com.mis.bookingrepositories.BookingRepo;
+import com.mis.bookingrepositories.BuildingRepo;
+import com.mis.bookingrepositories.SeatRepo;
+import com.mis.bookingrepositories.UserRepo;
 import com.mis.customclasses.Custom;
 import com.mis.customclasses.Location;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Book;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class BookingService {
     private final BookingRepo bookingRepo;
-    public BookingService(BookingRepo bookingRepo){
+    private final BuildingRepo buildingRepo;
+    private final SeatRepo seatRepo;
+    private final EmailSenderService emailSenderService;
+    private final UserRepo userRepo;
+    private final UserService userService;
+    public BookingService(BookingRepo bookingRepo, BuildingRepo buildingRepo, SeatRepo seatRepo, EmailSenderService emailSenderService, UserRepo userRepo, UserService userService){
         this.bookingRepo = bookingRepo;
+        this.buildingRepo = buildingRepo;
+        this.seatRepo = seatRepo;
+        this.emailSenderService = emailSenderService;
+        this.userRepo = userRepo;
+        this.userService = userService;
     }
     public boolean validateUser(Custom custom){
         String userId = custom.getUserId();
@@ -35,5 +49,58 @@ public class BookingService {
             System.out.println(b);
         }
         return new ResponseEntity<>(buildings.toString(),HttpStatus.FOUND);
+    }
+
+    public void bookseat(Custom custom) throws CustException {
+
+        if(!userService.verifyUser(custom.getUser()))
+        {
+            throw new CustException("Invalid User Details");
+        }
+            Optional<User> user=userRepo.findById(custom.getUser().getUserId());
+        User user1=user.get();
+        Optional<Building>building=buildingRepo.findById(custom.getBuildingName());
+        if(building.isEmpty())
+        {
+            throw  new CustException("Invalid Building Details");
+        }
+        List<Floor>floors=building.get().getFloorList();
+        if(!floors.contains(custom.getFloor().getFloorNo()))
+        {
+            throw new CustException("Invalid Floor no");
+        }
+        List<Room>roomList=floors.get(custom.getFloor().getFloorNo()).getRoomList();
+        if(!roomList.contains(custom.getRoom().getRoomNo()))
+        {
+            throw new CustException("Invalid Room Details");
+        }
+        List<Seat>seats=roomList.get(custom.getRoom().getRoomNo()).getSeatList();
+        if(!seats.contains(custom.getSeat().getSeatNo()))
+        {
+            throw new CustException("Invalid seat no");
+        }
+        String date1=custom.getBooking().getStartDate();
+        String date2=custom.getBooking().getEndDate();
+        Integer seatId=seatRepo.findId(custom.getSeat().getSeatNo(),custom.getFloor().getFloorNo(),custom.getBuilding().getBuildingName(),custom.getRoom().getRoomNo());
+        List<Booking>bookingList=bookingRepo.getBookinglist1(custom.getBuilding().getBuildingName(),date1,date2,seatId);
+
+        if(bookingList.isEmpty()) {
+            bookingRepo.save(custom.getBooking());
+        }
+        for(Booking obj:bookingList)
+        {
+           if((obj.getStartTime().compareTo(custom.getBooking().getEndTime())>0)&&(obj.getEndTime().compareTo(custom.getBooking().getStartTime())>0))
+           {
+               throw new CustException("Seat already booked");
+           }
+           else
+           {
+               Booking b1 = new Booking(custom.getBooking().getStartDate(),custom.getBooking().getEndDate(),custom.getBooking().getStartTime(),custom.getBooking().getEndTime(),user1,custom.getBuilding().getBuildingName(),seatId);
+               bookingRepo.save(b1);
+               emailSenderService.sendSimpleEmail(user1.getUserEmail(), "Booking Details","This is to inform you that you have booked a seat with following details "+b1.toString());
+               break;
+           }
+        }
+
     }
 }

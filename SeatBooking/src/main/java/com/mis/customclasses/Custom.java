@@ -8,6 +8,7 @@ public class Custom {
     Building building;
     Floor floor;
     Room room;
+    Seat seat;
 
     public Custom() {
     }
@@ -15,29 +16,23 @@ public class Custom {
     public Custom(User user){
         this.user = user;
     }
-    public Custom(User user, Booking booking){
-        this.user = user;
-        this.booking = booking;
-    }
-    public Custom(User user, Booking booking, Building building){
-        this.user = user;
-        this.booking = booking;
-        this.building = building;
-    }
-    public Custom(User user, Booking booking, Building building, Floor floor){
-        this.user = user;
-        this.booking = booking;
-        this.building = building;
-        this.floor = floor;
-    }
-    public Custom(User user, Booking booking, Building building, Floor floor, Room room){
+
+    public Custom(User user, Booking booking, Building building, Floor floor, Room room, Seat seat) {
         this.user = user;
         this.booking = booking;
         this.building = building;
         this.floor = floor;
         this.room = room;
+        this.seat = seat;
     }
 
+    public Seat getSeat() {
+        return seat;
+    }
+
+    public void setSeat(Seat seat) {
+        this.seat = seat;
+    }
 
     public String getBuildingName() {
         return building.getBuildingName();

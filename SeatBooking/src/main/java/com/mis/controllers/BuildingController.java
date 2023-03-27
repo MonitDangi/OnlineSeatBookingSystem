@@ -1,16 +1,15 @@
 package com.mis.controllers;
 
 import com.mis.CustException.CustException;
+import com.mis.bookingmodels.Building;
 import com.mis.bookingservices.BookingService;
 import com.mis.bookingservices.BuildingService;
 import com.mis.bookingservices.UserService;
 import com.mis.customclasses.Custom;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 public class BuildingController {
 
@@ -35,11 +34,16 @@ public class BuildingController {
 
         return new ResponseEntity<>("Bravo...you added a new building",HttpStatus.ACCEPTED);
     }
-    @RequestMapping("/findByBuilding")
+    @GetMapping("/findByBuilding")
     public ResponseEntity<String> findByBuilding(Custom custom) throws CustException {
         if(!bookingService.validateUser(custom)){
             return new ResponseEntity<>("No such user exist.", HttpStatus.BAD_REQUEST);
         }
         return buildingService.findByBuilding(custom);
+    }
+    @DeleteMapping("/deletebuilding")
+    public ResponseEntity<String> deleteBuilding(@RequestBody Building building) throws CustException {
+        buildingService.deletebuilding(building);
+        return new ResponseEntity<>("Building Deleted Successfully",HttpStatus.ACCEPTED);
     }
 }

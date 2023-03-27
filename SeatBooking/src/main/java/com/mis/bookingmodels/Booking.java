@@ -12,6 +12,8 @@ public class Booking {
     private Long bookingId;
     private String startDate;
     private String endDate;
+    private String buildingName;
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "userId")
     User userinfo;
@@ -19,26 +21,63 @@ public class Booking {
     List<Building>buildingList;
     private String startTime;
     private String endTime;
+    private Integer seatId;
+
+    public Integer getSeatId() {
+        return seatId;
+    }
+
+    public void setSeatId(Integer seatId) {
+        this.seatId = seatId;
+    }
+
     @Override
     public String toString() {
         return "Booking{" +
                 "bookingId=" + bookingId +
                 ", startDate='" + startDate + '\'' +
                 ", endDate='" + endDate + '\'' +
-                ", userinfo=" + userinfo +
-                ", buildingList=" + buildingList +
+                ", buildingName='" + buildingName + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
                 '}';
     }
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
     public Long getBookingId() {
         return bookingId;
     }
 
-    public Booking(Long bookingId, String startDate, String endDate, User userinfo, List<Building> buildingList) {
-        this.bookingId = bookingId;
+    public String getBuildingName() {
+        return buildingName;
+    }
+
+    public void setBuildingName(String buildingName) {
+        this.buildingName = buildingName;
+    }
+
+    public Booking(String startDate, String endDate, String startTime, String endTime, User userinfo, String buildingName,Integer seatId) {
         this.startDate = startDate;
         this.endDate = endDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.userinfo = userinfo;
-        this.buildingList = buildingList;
+        this.buildingName=buildingName;
+        this.seatId=seatId;
     }
 
     public void setBookingId(Long bookingId) {
