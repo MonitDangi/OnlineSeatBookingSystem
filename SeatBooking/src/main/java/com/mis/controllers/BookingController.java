@@ -2,36 +2,28 @@ package com.mis.controllers;
 
 import com.mis.CustException.CustException;
 import com.mis.bookingmodels.Booking;
-import com.mis.bookingmodels.Room;
 import com.mis.bookingmodels.Seat;
 import com.mis.bookingservices.BookingService;
-import com.mis.bookingservices.BuildingService;
 import com.mis.bookingservices.SeatService;
+import com.mis.bookingservices.UserService;
 import com.mis.customclasses.Custom;
 import com.mis.customclasses.Location;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.sound.midi.Soundbank;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController
 public class BookingController {
     private final BookingService bookingService;
-    private final BuildingService buildingService;
+    private final UserService userService;
     private final SeatService seatService;
-    public BookingController(BookingService bookingService, BuildingService buildingService, SeatService seatService){
+    public BookingController(BookingService bookingService, UserService userService, SeatService seatService){
         this.bookingService = bookingService;
-        this.buildingService = buildingService;
+        this.userService = userService;
         this.seatService = seatService;
     }
 
@@ -41,7 +33,6 @@ public class BookingController {
     }
     @PostMapping("/bookseat")
     public ResponseEntity<String> bookseat(@RequestBody Custom custom) throws CustException, ParseException {
-        System.out.println(custom.toString());
         bookingService.bookseat(custom);
         return new ResponseEntity<>("Seat Booked Successfully and a mail regarding the same has been sent to you registered mail id", HttpStatus.ACCEPTED);
     }
@@ -72,5 +63,26 @@ public class BookingController {
             if(!clashSeatIds.contains(s.getSeatId()))availableSeats.append(s.toString1()+"\n");
         }
         return new ResponseEntity<>(availableSeats.toString(), HttpStatus.FOUND);
+    }
+
+    @GetMapping("/getUserHistory")
+    public ResponseEntity<String> getUserHistory(@RequestBody Custom custom)throws CustException{
+        userService.verifyUser(custom.getUser());
+        return bookingService.getHistory(custom);
+    }
+    @PostMapping("/bookNSeats")
+    public ResponseEntity<String> bookNSeats(@RequestBody Custom custom) throws ParseException, CustException {
+        List<Seat>seatList = seatService.getAllSeats(custom);
+        if(seatList.size() < custom.getNumberOfSeats()){
+            return new ResponseEntity<>("Enough number of seats are not available in given room.", HttpStatus.ACCEPTED);
+        }
+        StringBuilder content = new StringBuilder();
+        for(int i = 0; i < custom.getNumberOfSeats(); i++){
+
+            custom.getSeat().setSeatNo(seatList.get(i).getSeatNo());
+            content.append(bookingService.bookNSeat(custom));
+        }
+        bookingService.sentEmail(custom.getUser(), content.toString());
+        return new ResponseEntity<>("All Seat Booked Successfully and a mail regarding the same has been sent to you registered mail id", HttpStatus.ACCEPTED);
     }
 }

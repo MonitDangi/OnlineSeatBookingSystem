@@ -40,6 +40,18 @@ public class BookingService {
         this.userService = userService;
     }
 
+    public ResponseEntity<String> getHistory(Custom custom) {
+        System.out.println(custom.getUser().getUserId());
+        Optional<List<Booking>>userHistory = bookingRepo.getUserHistory(custom.getUser().getUserId());
+        if(userHistory.isEmpty())return new ResponseEntity<>("No bookings Found.", HttpStatus.FOUND);
+        List<Booking>history = userHistory.get();
+        StringBuilder his = new StringBuilder();
+        for(Booking b: history){
+            his.append(b.toString()).append("\n");
+        }
+        return new ResponseEntity<>(his.toString(), HttpStatus.FOUND);
+    }
+
     public ResponseEntity<String> findByLocation(Location custom) {
         Optional<List<Building>> buildingLists = bookingRepo.findAvailableSeatsAtLocation(custom.getBuilding_location());
         StringBuilder buildings = new StringBuilder();
@@ -82,7 +94,7 @@ public void validateTime(Custom custom)throws CustException{
 
     public void bookseat(Custom custom) throws CustException, ParseException {
         validateDates(custom);
-       validateTime(custom);
+        validateTime(custom);
         if(!userService.verifyUser(custom.getUser()))
         {
             throw new CustException("Invalid ID/Password");
@@ -154,9 +166,9 @@ public void validateTime(Custom custom)throws CustException{
                Booking b1 = new Booking(custom.getBooking().getStartDate(),custom.getBooking().getEndDate(),custom.getBooking().getStartTime(),custom.getBooking().getEndTime(),user1,custom.getBuilding().getBuildingName(),seatId);
                bookingRepo.save(b1);
                emailSenderService.sendSimpleEmail(user1.getUserEmail(), "Booking Details","This is to inform you that you have booked a seat with following details "+b1+"\n * Seat No : "+custom.getSeat().getSeatNo()+"\n * Floor No : "+custom.getFloor().getFloorNo()+"\n * Room No : "+custom.getRoom().getRoomNo()+"\n\n\n\n In case of any query reach out to our customer care service"+"\n Email : onlineseatbookingsystem@gmail.com");
-
-
     }
+
+
     public boolean isClash(String date1, String startTime, String endTime, String date2, Custom custom) throws ParseException {
 
         String event1Start = date1+" "+startTime;
@@ -203,6 +215,85 @@ public void validateTime(Custom custom)throws CustException{
         }
         emailSenderService.sendSimpleEmail(temp.getUserEmail(),"Booking Cancellation Request ","Hi "+temp.getName()+" as per request we have cancelled your booking with following details \n"+booking.get()+"\n\n\n\n In case of any query reach to our customer care service\n Email : onlineseatbookingsystem@gmail.com");
         bookingRepo.deleteById(booking.get().getBookingId());
-
+    }
+    public String bookNSeat(Custom custom) throws CustException, ParseException {
+        validateDates(custom);
+        validateTime(custom);
+        if(!userService.verifyUser(custom.getUser()))
+        {
+            throw new CustException("Invalid ID/Password");
+        }
+        Optional<User> user=userRepo.findById(custom.getUser().getUserId());
+        User user1=user.get();
+        Optional<Building>building=buildingRepo.findById(custom.getBuildingName());
+        if(building.isEmpty())
+        {
+            throw  new CustException("Invalid Building Details");
+        }
+        List<Floor>floors=building.get().getFloorList();
+        Floor tempfloor=new Floor();
+        boolean b=false;
+        for(Floor obj:floors)
+        {
+            if(obj.getFloorNo()==custom.getFloor().getFloorNo())
+            {
+                b=true;
+                tempfloor.setRoomList(obj.getRoomList());
+                break;
+            }
+        }
+        if(!b)
+        {
+            throw new CustException("Invalid Floor no");
+        }
+        List<Room>roomList=tempfloor.getRoomList();
+        b=false;
+        Room temproom=new Room();
+        for(Room obj:roomList)
+        {
+            if(obj.getRoomNo()==custom.getRoom().getRoomNo())
+            {
+                b=true;
+                temproom.setSeatList(obj.getSeatList());
+                break;
+            }
+        }
+        if(!b)
+        {
+            throw new CustException("Invalid Room Details");
+        }
+        List<Seat>seats=temproom.getSeatList();
+        b=false;
+        for(Seat obj:seats)
+        {
+            if(obj.getSeatNo() == custom.getSeat().getSeatNo())
+            {
+                b=true;
+                break;
+            }
+        }
+        if(!b)
+        {
+            throw new CustException("Invalid seat no");
+        }
+        String date1=custom.getBooking().getStartDate();
+        String date2=custom.getBooking().getEndDate();
+        Integer seatId=seatRepo.findId(custom.getSeat().getSeatNo(),custom.getFloor().getFloorNo(),custom.getBuilding().getBuildingName(),custom.getRoom().getRoomNo());
+        List<Booking>bookingList=bookingRepo.getBookinglist1(custom.getBuilding().getBuildingName(),date1,date2,seatId);
+        for(Booking obj:bookingList)
+        {
+            if(isClash(obj.getStartDate(),obj.getStartTime(), obj.getEndTime(), obj.getEndDate(), custom))
+            {
+                throw new CustException("Seat already booked");
+            }
+        }
+        Booking b1 = new Booking(custom.getBooking().getStartDate(),custom.getBooking().getEndDate(),custom.getBooking().getStartTime(),custom.getBooking().getEndTime(),user1,custom.getBuilding().getBuildingName(),seatId);
+        bookingRepo.save(b1);
+        return b1.toString();
+    }
+    public void sentEmail(User u, String s){
+        Optional<User> user=userRepo.findById(u.getUserId());
+        User user1=user.get();
+        emailSenderService.sendSimpleEmail(user1.getUserEmail(), "Booking Details","This is to inform you that you have booked a seat with following details:"+s+"\n\n\n\n In case of any query reach out to our customer care service"+"\n Email : onlineseatbookingsystem@gmail.com");
     }
 }

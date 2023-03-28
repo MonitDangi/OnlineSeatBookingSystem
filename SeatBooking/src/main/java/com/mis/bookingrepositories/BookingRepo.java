@@ -20,4 +20,6 @@ public interface BookingRepo extends JpaRepository<Booking, Long> {
     List<Booking> getBookinglist1(String buildingName, String date1, String date2, Integer seatId);
     @Query(value = "select b from Booking b ")
     List<Booking> getClashingSeats();
+    @Query(value = "select b from Booking b where b.userinfo.userId = ?1")
+    Optional<List<Booking>> getUserHistory(String userId);
 }

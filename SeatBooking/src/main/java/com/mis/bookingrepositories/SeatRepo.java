@@ -14,4 +14,6 @@ public interface SeatRepo extends JpaRepository<Seat, Integer> {
     Integer findId(Integer seatNo, Integer floorNo, String buildingName, Integer roomNo);
     @Query(value = "select s from Seat s")
     List<Seat> getAllSeat();
+    @Query(value = "select s from Seat s where s.buildingName = ?1 and s.floorNo = ?2 and s.room.roomNo =?3")
+    List<Seat> getAllSeatsInRoom(String buildingName, Integer floorNo, Integer roomNo);
 }

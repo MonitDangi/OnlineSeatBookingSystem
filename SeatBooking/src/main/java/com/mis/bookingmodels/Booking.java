@@ -107,4 +107,15 @@ public class Booking {
     public Booking() {
 
     }
+
+    public String toString1() {
+        return "Booking Details" +
+                "\n * BookingId : " + bookingId +
+                "\n * StartDate : " + startDate +
+                "\n * EndDate : " + endDate +
+                "\n * BuildingName : " + buildingName +
+                "\n * StartTime : " + startTime +
+                "\n * EndTime : " + endTime
+                ;
+    }
 }

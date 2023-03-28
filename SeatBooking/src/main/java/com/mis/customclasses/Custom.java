@@ -9,6 +9,7 @@ public class Custom {
     Floor floor;
     Room room;
     Seat seat;
+    int numberOfSeats;
 
     public Custom() {
     }
@@ -17,13 +18,14 @@ public class Custom {
         this.user = user;
     }
 
-    public Custom(User user, Booking booking, Building building, Floor floor, Room room, Seat seat) {
+    public Custom(User user, Booking booking, Building building, Floor floor, Room room, Seat seat, int numberOfSeats) {
         this.user = user;
         this.booking = booking;
         this.building = building;
         this.floor = floor;
         this.room = room;
         this.seat = seat;
+        this.numberOfSeats = numberOfSeats;
     }
 
     public Seat getSeat() {
@@ -88,6 +90,14 @@ public class Custom {
 
     public String getUserPassword() {
         return user.getPassword();
+    }
+
+    public int getNumberOfSeats() {
+        return numberOfSeats;
+    }
+
+    public void setNumberOfSeats(int numberOfSeats) {
+        this.numberOfSeats = numberOfSeats;
     }
 
     @Override
