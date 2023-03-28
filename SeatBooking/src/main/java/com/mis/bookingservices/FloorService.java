@@ -39,9 +39,10 @@ public class FloorService {
         return floorRepo.findAllFloors(buildingName);
     }
 
-    public Floor getFloor(Custom custom) {
+    public Optional<Floor> getFloor(Custom custom) {
         Optional<Floor> opt1 = floorRepo.findFloor(custom.getFloor().getFloorNo(), custom.getBuilding().getBuildingName());
-        return opt1.get();
+        System.out.println("Helllllooooo");
+        return opt1;
     }
 
     public void updateCapacity(String buildingName, Integer floorNo, int numberOfSeats) {

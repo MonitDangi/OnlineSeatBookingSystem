@@ -11,10 +11,7 @@ import com.mis.customclasses.Custom;
 import com.mis.customclasses.Location;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.sound.midi.Soundbank;
 import java.text.ParseException;
@@ -48,7 +45,12 @@ public class BookingController {
         bookingService.bookseat(custom);
         return new ResponseEntity<>("Seat Booked Successfully and a mail regarding the same has been sent to you registered mail id", HttpStatus.ACCEPTED);
     }
-
+    @DeleteMapping("/cancelSeat")
+    public ResponseEntity<String> cancelSeat(@RequestBody Custom custom) throws CustException
+    {
+        bookingService.cancelseat(custom);
+        return new ResponseEntity<>("Booking Cancelled Successfully",HttpStatus.ACCEPTED);
+    }
     @GetMapping("/getAllSeatsForTime")
     public ResponseEntity<String> getAllSeatsForTime(@RequestBody Custom custom) throws CustException, ParseException {
         bookingService.validateDates(custom);

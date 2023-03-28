@@ -31,12 +31,13 @@ public class FloorController {
 
     @PostMapping("/addFloor")
     public ResponseEntity<String> addFloor(@RequestBody Custom custom) throws CustException {
+        System.out.println(custom);
         //verify user.
         if(!userService.verifyUser(custom.getUser()))throw new CustException("No Such User Exist");
         //verifyBuilding
         if(!buildingService.verifyBuilding(custom.getBuildingName()))throw new CustException("No Such Building Exist");
-        Floor fl =  floorService.getFloor(custom);
-        if(fl != null)throw new CustException("Floor already Exist");
+        Optional<Floor> fl =  floorService.getFloor(custom);
+        if(fl.isPresent())throw new CustException("Floor already Exist");
         Building b = buildingService.getBuilding(custom.getBuilding());
         Floor newf = new Floor(custom.getFloor().getFloorNo(), custom.getFloor().getFloorCapacity(),b);
         floorService.addFloor(newf);

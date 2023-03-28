@@ -34,7 +34,7 @@ public class RoomService {
     public ResponseEntity<String> addRoom(Custom custom){
         Room room = custom.getRoom();
         if(checkRoom(room.getRoomNo(), custom.getFloor().getFloorNo(),custom.getBuilding().getBuildingName()))return new ResponseEntity<>("Room Already Exist.", HttpStatus.ALREADY_REPORTED);
-        Floor f = floorService.getFloor(custom);
+        Floor f = floorService.getFloor(custom).get();
         Room r = new Room(custom.getRoom().getRoomNo(), custom.getBuildingName(), custom.getRoom().getNumberOfSeats(), f);
         roomRepo.save(r);
         floorService.updateCapacity(custom.getBuildingName(), f.getFloorNo(), r.getNumberOfSeats());

@@ -2,8 +2,6 @@ package com.mis.bookingmodels;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Entity
 @Table(name = "booking")
 public class Booking {
@@ -14,7 +12,7 @@ public class Booking {
     private String endDate;
     private String buildingName;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     @JoinColumn(name = "userId")
     User userinfo;
     private String startTime;

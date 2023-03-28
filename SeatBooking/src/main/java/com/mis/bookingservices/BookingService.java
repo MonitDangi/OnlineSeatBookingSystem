@@ -144,24 +144,17 @@ public void validateTime(Custom custom)throws CustException{
         String date2=custom.getBooking().getEndDate();
         Integer seatId=seatRepo.findId(custom.getSeat().getSeatNo(),custom.getFloor().getFloorNo(),custom.getBuilding().getBuildingName(),custom.getRoom().getRoomNo());
         List<Booking>bookingList=bookingRepo.getBookinglist1(custom.getBuilding().getBuildingName(),date1,date2,seatId);
-        if(bookingList.isEmpty()) {
-            Booking b1 = new Booking(custom.getBooking().getStartDate(),custom.getBooking().getEndDate(),custom.getBooking().getStartTime(),custom.getBooking().getEndTime(),user1,custom.getBuilding().getBuildingName(),seatId);
-            bookingRepo.save(b1);
-        }
         for(Booking obj:bookingList)
         {
             if(isClash(obj.getStartDate(),obj.getStartTime(), obj.getEndTime(), obj.getEndDate(), custom))
            {
                throw new CustException("Seat already booked");
            }
-           else
-           {
+        }
                Booking b1 = new Booking(custom.getBooking().getStartDate(),custom.getBooking().getEndDate(),custom.getBooking().getStartTime(),custom.getBooking().getEndTime(),user1,custom.getBuilding().getBuildingName(),seatId);
                bookingRepo.save(b1);
                emailSenderService.sendSimpleEmail(user1.getUserEmail(), "Booking Details","This is to inform you that you have booked a seat with following details "+b1+"\n * Seat No : "+custom.getSeat().getSeatNo()+"\n * Floor No : "+custom.getFloor().getFloorNo()+"\n * Room No : "+custom.getRoom().getRoomNo()+"\n\n\n\n In case of any query reach out to our customer care service"+"\n Email : onlineseatbookingsystem@gmail.com");
-               break;
-           }
-        }
+
 
     }
     public boolean isClash(String date1, String startTime, String endTime, String date2, Custom custom) throws ParseException {
@@ -184,5 +177,32 @@ public void validateTime(Custom custom)throws CustException{
 
     public List<Booking> getClashingSeats() {
         return bookingRepo.getClashingSeats();
+    }
+
+    public void cancelseat(Custom custom) throws CustException {
+        if(!userService.verifyUser(custom.getUser()))
+            throw new CustException("Invalid User Details");
+        Optional<User>user=userRepo.findById(custom.getUserId());
+        if(user.isEmpty())
+        {
+            throw new CustException("Invalid User Details");
+        }
+        User temp=user.get();
+        Optional<Booking>booking=bookingRepo.findById(custom.getBooking().getBookingId());
+        if(booking.isEmpty())
+        {
+            throw new CustException("Invalid Booking Details");
+        }
+        LocalTime time=LocalTime.parse(booking.get().getStartTime());
+        LocalDate date=LocalDate.parse(booking.get().getStartDate());
+        LocalDate date1=LocalDate.now();
+        LocalTime time1=LocalTime.now();
+        if(time1.isAfter(time)&&date1.isEqual(date))
+        {
+            throw new CustException("Cannot cancel Booking ");
+        }
+        emailSenderService.sendSimpleEmail(temp.getUserEmail(),"Booking Cancellation Request ","Hi "+temp.getName()+" as per request we have cancelled your booking with following details \n"+booking.get()+"\n\n\n\n In case of any query reach to our customer care service\n Email : onlineseatbookingsystem@gmail.com");
+        bookingRepo.deleteById(booking.get().getBookingId());
+
     }
 }

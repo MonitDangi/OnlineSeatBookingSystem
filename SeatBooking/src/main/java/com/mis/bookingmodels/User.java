@@ -91,6 +91,6 @@ public class User {
     private String password;
     private int userType;
 
-    @OneToMany(mappedBy = "userinfo", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "userinfo", cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     List<Booking>bookingList;
 }

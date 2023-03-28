@@ -82,13 +82,15 @@ public class BuildingService {
            for(Booking b:bookingList)
            {
                LocalTime time=LocalTime.now();
-            if((b.getStartTime().compareTo(String.valueOf(time)))>=0)
+               LocalTime time1=LocalTime.parse(b.getStartTime());
+            if(time1.isAfter(time))
             {
-             emailSenderService.sendSimpleEmail(b.getUserinfo().getUserEmail(),"Booking Cancelled ","Hi "+b.getUserinfo().getName()+" this is to inform you that your booking with following details "+b.getBookingId()+" "+b.getStartDate()+" "+b.getBuildingName()+" has been cancelled due to some reasons so please take note of this in case of any query reach out to our customer care service. /n Thanks ");
+             emailSenderService.sendSimpleEmail(b.getUserinfo().getUserEmail(),"Booking Cancelled ","Hi "+b.getUserinfo().getName()+" this is to inform you that your booking with following details  has been cancelled due to some reasons so please take note of this.\n"+b+" \n\n\n\n\nIn case of any query reach out to our customer care service. /n Thanks ");
             }
+               bookingRepo.deleteById(b.getBookingId());
            }
         }
-        buildingRepo.delete(building);
+        buildingRepo.deleteById(building.getBuildingName());
     }
 
     public void updateCapacity(String buildingName, int numberOfSeats) {
