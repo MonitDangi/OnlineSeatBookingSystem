@@ -12,12 +12,14 @@ import com.mis.customclasses.Location;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.awt.print.Book;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,16 +48,41 @@ public class BookingService {
         if(buildingList.isEmpty())return new ResponseEntity<>("No Buildings Available at given Location", HttpStatus.NOT_FOUND);
         for(Building b : buildingList){
             buildings.append(b.toString1()).append("\n");
-            System.out.println(b);
         }
         return new ResponseEntity<>(buildings.toString(),HttpStatus.FOUND);
     }
-//    public ResponseEntity<String> listAllSeatsForTime(Custom custom){
-//        List<Booking>bookedSeats =
-//    }
+public void validateTime(Custom custom)throws CustException{
+    String startTime =  custom.getBooking().getStartTime();
+    String endTime = custom.getBooking().getEndTime();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+    try {
+        LocalTime.parse(startTime, formatter);
+        LocalTime.parse(endTime, formatter);
+    }catch (Exception e){
+        throw new CustException("Invalid time");
+    }
+}
+    public void validateDates(Custom custom)throws CustException{
+        SimpleDateFormat dtf = new SimpleDateFormat("yyyy-MM-dd");
+        String startingDate = custom.getBooking().getStartDate();
+        String endDate = custom.getBooking().getEndDate();
+        try{
+            Date d1 = dtf.parse(startingDate);
+            Date d2 = dtf.parse(endDate);
+            LocalDate currentDate = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String today = currentDate.format(formatter);
+            Date d3 = dtf.parse(today);
+            if(d1.compareTo(d2) > 1 || d1.compareTo(d3) < 0)throw new CustException("End date should be greater than start date start date should be greater then current date.");
+        }
+        catch (Exception e){
+            throw new CustException("Invalid date or time format.");
+        }
+    }
 
-    public void bookseat(Custom custom) throws CustException {
-
+    public void bookseat(Custom custom) throws CustException, ParseException {
+        validateDates(custom);
+       validateTime(custom);
         if(!userService.verifyUser(custom.getUser()))
         {
             throw new CustException("Invalid ID/Password");
@@ -123,7 +150,7 @@ public class BookingService {
         }
         for(Booking obj:bookingList)
         {
-           if((obj.getStartDate().compareTo(custom.getBooking().getEndDate())<0)&&(obj.getStartTime().compareTo(custom.getBooking().getEndTime())<0)&&(obj.getEndTime().compareTo(custom.getBooking().getStartTime())>0)&&(obj.getEndDate().compareTo(custom.getBooking().getStartDate())>0))
+            if(isClash(obj.getStartDate(),obj.getStartTime(), obj.getEndTime(), obj.getEndDate(), custom))
            {
                throw new CustException("Seat already booked");
            }
@@ -143,10 +170,6 @@ public class BookingService {
         String event1End = date2+" "+endTime;
         String event2Start = custom.getBooking().getStartDate()+" "+custom.getBooking().getStartTime();
         String event2End = custom.getBooking().getEndDate()+" "+custom.getBooking().getEndTime();
-        System.out.println(event1Start);
-        System.out.println(event1End);
-        System.out.println(event2Start);
-        System.out.println(event2End);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime dateTime1Start = LocalDateTime.parse(event1Start, formatter);
         LocalDateTime dateTime1End = LocalDateTime.parse(event1End, formatter);
@@ -154,10 +177,8 @@ public class BookingService {
         LocalDateTime dateTime2End = LocalDateTime.parse(event2End, formatter);
 
         if(dateTime1Start.isBefore(dateTime2End) && dateTime1End.isAfter(dateTime2Start) || (dateTime2Start.isBefore(dateTime1End) && dateTime2End.isAfter(dateTime1Start))||(dateTime1Start.equals(dateTime1Start) && dateTime1End.equals(dateTime2End))){
-            System.out.println("Clashing...................");
             return true;
         }
-        System.out.println("Not Clashing...................");
         return false;
     }
 
