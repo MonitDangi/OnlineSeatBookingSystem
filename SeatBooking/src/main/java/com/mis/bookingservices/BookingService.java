@@ -14,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Book;
+import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -133,6 +136,29 @@ public class BookingService {
            }
         }
 
+    }
+    public boolean isClash(String date1, String startTime, String endTime, String date2, Custom custom) throws ParseException {
+
+        String event1Start = date1+" "+startTime;
+        String event1End = date2+" "+endTime;
+        String event2Start = custom.getBooking().getStartDate()+" "+custom.getBooking().getStartTime();
+        String event2End = custom.getBooking().getEndDate()+" "+custom.getBooking().getEndTime();
+        System.out.println(event1Start);
+        System.out.println(event1End);
+        System.out.println(event2Start);
+        System.out.println(event2End);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime dateTime1Start = LocalDateTime.parse(event1Start, formatter);
+        LocalDateTime dateTime1End = LocalDateTime.parse(event1End, formatter);
+        LocalDateTime dateTime2Start = LocalDateTime.parse(event2Start, formatter);
+        LocalDateTime dateTime2End = LocalDateTime.parse(event2End, formatter);
+
+        if(dateTime1Start.isBefore(dateTime2End) && dateTime1End.isAfter(dateTime2Start) || (dateTime2Start.isBefore(dateTime1End) && dateTime2End.isAfter(dateTime1Start))||(dateTime1Start.equals(dateTime1Start) && dateTime1End.equals(dateTime2End))){
+            System.out.println("Clashing...................");
+            return true;
+        }
+        System.out.println("Not Clashing...................");
+        return false;
     }
 
     public List<Booking> getClashingSeats() {
