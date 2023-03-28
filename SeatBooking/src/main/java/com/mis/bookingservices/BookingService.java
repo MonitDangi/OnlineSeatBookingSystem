@@ -134,4 +134,8 @@ public class BookingService {
         }
 
     }
+
+    public List<Booking> getClashingSeats() {
+        return bookingRepo.getClashingSeats();
+    }
 }

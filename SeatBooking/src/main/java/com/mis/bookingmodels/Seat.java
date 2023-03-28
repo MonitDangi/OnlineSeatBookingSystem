@@ -68,10 +68,15 @@ public class Seat {
         this.room = room;
     }
 
+    public Integer getSeatId() {
+        return seatId;
+    }
+
     public String toString1() {
                 return "seatNo=" + seatNo +
                 ", floorNo=" + floorNo +
                 ", buildingName='" + buildingName + '\'' +
+                        ", room No:"+ room.getRoomNo()+
                 ".";
     }
 }

@@ -1,6 +1,7 @@
 package com.mis.bookingservices;
 
 import com.mis.bookingmodels.Floor;
+import com.mis.bookingmodels.Room;
 import com.mis.bookingmodels.Seat;
 import com.mis.bookingrepositories.FloorRepo;
 import com.mis.bookingrepositories.SeatRepo;
@@ -39,5 +40,9 @@ public class SeatService {
             str.append(s.toString1()).append("\n");
         }
         return new ResponseEntity<>(str.toString(), HttpStatus.ACCEPTED);
+    }
+
+    public List<Seat> getAllRoom() {
+        return seatRepo.getAllSeat();
     }
 }

@@ -1,8 +1,12 @@
 package com.mis.controllers;
 
 import com.mis.CustException.CustException;
+import com.mis.bookingmodels.Booking;
+import com.mis.bookingmodels.Room;
+import com.mis.bookingmodels.Seat;
 import com.mis.bookingservices.BookingService;
 import com.mis.bookingservices.BuildingService;
+import com.mis.bookingservices.SeatService;
 import com.mis.customclasses.Custom;
 import com.mis.customclasses.Location;
 import org.springframework.http.HttpStatus;
@@ -12,38 +16,51 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 public class BookingController {
     private final BookingService bookingService;
     private final BuildingService buildingService;
-    public BookingController(BookingService bookingService, BuildingService buildingService){
+    private final SeatService seatService;
+    public BookingController(BookingService bookingService, BuildingService buildingService, SeatService seatService){
         this.bookingService = bookingService;
         this.buildingService = buildingService;
+        this.seatService = seatService;
     }
-    public boolean validateDates(Custom custom)throws CustException{
-        String dateFormat = "yyyy/MM/dd";
-        SimpleDateFormat startingDate = new SimpleDateFormat(custom.getBooking().getStartDate());
-        SimpleDateFormat endDate = new SimpleDateFormat(custom.getBooking().getEndDate());
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(dateFormat);
+    public void validateTime(Custom custom)throws CustException{
+        String startTime =  custom.getBooking().getStartTime();
+        String endTime = custom.getBooking().getEndTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        try {
+            LocalTime.parse(startTime, formatter);
+            LocalTime.parse(endTime, formatter);
+        }catch (Exception e){
+            throw new CustException("Invalid time");
+        }
+    }
+    public void validateDates(Custom custom)throws CustException{
+        SimpleDateFormat dtf = new SimpleDateFormat("dd-MM-yyyy");
+        String startingDate = custom.getBooking().getStartDate();
+        String endDate = custom.getBooking().getEndDate();
         try{
-            Date d1 = startingDate.parse(dateFormat);
-            Date d2 = endDate.parse(dateFormat);
+            Date d1 = dtf.parse(startingDate);
+            Date d2 = dtf.parse(endDate);
             LocalDate currentDate = LocalDate.now();
-            String strCurrentDate = currentDate.format(dtf);
-            SimpleDateFormat curr = new SimpleDateFormat(strCurrentDate);
-            Date d3 = curr.parse(dateFormat);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String today = currentDate.format(formatter);
+            Date d3 = dtf.parse(today);
             if(d1.compareTo(d2) > 1 || d1.compareTo(d3) < 0)throw new CustException("End date should be greater than start date start date should be greater then current date.");
         }
         catch (Exception e){
             throw new CustException("Invalid date or time format.");
         }
-        return true;
     }
     @GetMapping("/findByLocation")
     public ResponseEntity<String> findByLocation(@RequestBody Location location){
@@ -55,7 +72,31 @@ public class BookingController {
         bookingService.bookseat(custom);
         return new ResponseEntity<>("Seat Booked Successfully and a mail regarding the same has been sent to you registered mail id", HttpStatus.ACCEPTED);
     }
+//    private boolean isClash(String date1, String Date2, String startTime, String endTime, Custom custom){
+//        SimpleDateFormat dtf = new SimpleDateFormat("dd-MM-yyyy");
+//        if()
+//    }
 //    @GetMapping("/getAllSeatsForTime")
-//    public ResponseEntity<String> getAllSeatsForTime(Custom custom) throws CustException {
+//    public ResponseEntity<String> getAllSeatsForTime(@RequestBody Custom custom) throws CustException {
+//        validateDates(custom);
+//        validateTime(custom);
+//        List<Seat> seatList = seatService.getAllRoom();
+//        List<Booking> clasBookings = bookingService.getClashingSeats();
+//        for(Booking b: clasBookings){
+//            for(Seat s: seatList){
+//                if(s.getSeatId() == b.getSeatId()){
+//                    if(!isClash(b.getStartDate(), b.getStartTime(), b.getEndTime(), b.getEndDate(), custom){
+//                        seatList.add(s);
+//                    }
+//                }
+//            }
+//        }
+//        StringBuilder availableSeats = new StringBuilder();
+//        for(Seat s: seatList){
+//            if(!seatIds.contains(s.getSeatId())){
+//                availableSeats.append(s.toString1()).append("\n");
+//            }
+//        }
+//        return new ResponseEntity<>(availableSeats.toString(), HttpStatus.FOUND);
 //    }
 }
