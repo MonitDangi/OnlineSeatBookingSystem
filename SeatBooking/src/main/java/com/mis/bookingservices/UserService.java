@@ -38,11 +38,10 @@ public class UserService {
         StringBuilder salt = new StringBuilder();
         Random rnd = new Random();
         while (salt.length() < 6) {
-            int index = (rnd.nextInt() * string.length());
+            int index =(int) (rnd.nextFloat() * string.length());
             salt.append(string.charAt(index));
         }
         return salt.toString();
-
     }
 
     public boolean verifyUser(User user) throws CustException {
