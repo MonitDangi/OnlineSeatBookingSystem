@@ -2,6 +2,7 @@ package com.mis.bookingservices;
 
 import com.mis.CustException.CustException;
 import com.mis.EmailService.EmailSenderService;
+import com.mis.PdfGenerate.PdfService;
 import com.mis.bookingmodels.*;
 import com.mis.bookingrepositories.BookingRepo;
 import com.mis.bookingrepositories.BuildingRepo;
@@ -9,6 +10,7 @@ import com.mis.bookingrepositories.SeatRepo;
 import com.mis.bookingrepositories.UserRepo;
 import com.mis.customclasses.Custom;
 import com.mis.customclasses.Location;
+import jakarta.mail.MessagingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,13 +33,15 @@ public class BookingService {
     private final EmailSenderService emailSenderService;
     private final UserRepo userRepo;
     private final UserService userService;
-    public BookingService(BookingRepo bookingRepo, BuildingRepo buildingRepo, SeatRepo seatRepo, EmailSenderService emailSenderService, UserRepo userRepo, UserService userService){
+    private final PdfService pdfService;
+    public BookingService(BookingRepo bookingRepo, BuildingRepo buildingRepo, SeatRepo seatRepo, EmailSenderService emailSenderService, UserRepo userRepo, UserService userService, PdfService pdfService){
         this.bookingRepo = bookingRepo;
         this.buildingRepo = buildingRepo;
         this.seatRepo = seatRepo;
         this.emailSenderService = emailSenderService;
         this.userRepo = userRepo;
         this.userService = userService;
+        this.pdfService = pdfService;
     }
 
     public ResponseEntity<String> getHistory(Custom custom) {
@@ -92,7 +96,7 @@ public void validateTime(Custom custom)throws CustException{
         }
     }
 
-    public void bookseat(Custom custom) throws CustException, ParseException {
+    public void bookseat(Custom custom) throws CustException, ParseException, MessagingException {
         validateDates(custom);
         validateTime(custom);
         if(!userService.verifyUser(custom.getUser()))
@@ -165,7 +169,8 @@ public void validateTime(Custom custom)throws CustException{
         }
                Booking b1 = new Booking(custom.getBooking().getStartDate(),custom.getBooking().getEndDate(),custom.getBooking().getStartTime(),custom.getBooking().getEndTime(),user1,custom.getBuilding().getBuildingName(),seatId);
                bookingRepo.save(b1);
-               emailSenderService.sendSimpleEmail(user1.getUserEmail(), "Booking Details","This is to inform you that you have booked a seat with following details "+b1+"\n * Seat No : "+custom.getSeat().getSeatNo()+"\n * Floor No : "+custom.getFloor().getFloorNo()+"\n * Room No : "+custom.getRoom().getRoomNo()+"\n\n\n\n In case of any query reach out to our customer care service"+"\n Email : onlineseatbookingsystem@gmail.com");
+               pdfService.generatepdf("\n\n\nHi "+user1.getName()+"!",b1.toString(),b1.getBookingId());
+               emailSenderService.sendMailWithAttachment(user1.getUserEmail(), "Booking Details","This is to inform you that you have booked a seat with following details "+b1+"\n * Seat No : "+custom.getSeat().getSeatNo()+"\n * Floor No : "+custom.getFloor().getFloorNo()+"\n * Room No : "+custom.getRoom().getRoomNo()+"\n\n\n\n In case of any query reach out to our customer care service"+"\n Email : onlineseatbookingsystem@gmail.com","C:\\Users\\DEVANSH DIXIT\\Downloads\\"+b1.getBookingId()+".pdf");
     }
 
 

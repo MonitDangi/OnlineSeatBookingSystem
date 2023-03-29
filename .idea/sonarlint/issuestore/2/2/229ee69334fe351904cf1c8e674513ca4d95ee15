@@ -1,14 +1,0 @@
-
-v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(¡Ìé–8»²‰›ñ0
-U	java:S106"9Replace this use of System.out or System.err by a logger.(¶öã8Ø²‰›ñ0
-g
-java:S1128"KRemove this unused import 'org.springframework.core.io.FileSystemResource'.(°ü‘48ˆ•÷›ñ0
-r
-java:S1128"PRemove this unused import 'org.springframework.mail.javamail.MimeMessageHelper'.(Ö€”÷øÿÿÿÿ8ˆ•÷›ñ0
-W
-java:S1128	":Remove this unused import 'javax.mail.MessagingException'.(ÇîŞ8ˆ•÷›ñ0
-^
-java:S1128
-"<Remove this unused import 'javax.mail.internet.MimeMessage'.(«ÀÔ€şÿÿÿÿ8‰•÷›ñ0
-F
-java:S1128")Remove this unused import 'java.io.File'.(†Ğ¥Å8‰•÷›ñ0
