@@ -31,8 +31,7 @@ public class FloorController {
 
     @PostMapping("/addFloor")
     public ResponseEntity<String> addFloor(@RequestBody Custom custom) throws CustException {
-        System.out.println(custom);
-        //verify user.
+       //verify user.
         if(!userService.verifyUser(custom.getUser()))throw new CustException("No Such User Exist");
         //verifyBuilding
         if(!buildingService.verifyBuilding(custom.getBuildingName()))throw new CustException("No Such Building Exist");

@@ -17,6 +17,10 @@ public class Custom {
     public Custom(User user){
         this.user = user;
     }
+    public Custom(User user, Building building) {
+        this.user = user;
+        this.building = building;
+    }
 
     public Custom(User user, Booking booking, Building building, Floor floor, Room room, Seat seat, int numberOfSeats) {
         this.user = user;

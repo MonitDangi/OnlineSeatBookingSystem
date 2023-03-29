@@ -41,7 +41,6 @@ public class FloorService {
 
     public Optional<Floor> getFloor(Custom custom) {
         Optional<Floor> opt1 = floorRepo.findFloor(custom.getFloor().getFloorNo(), custom.getBuilding().getBuildingName());
-        System.out.println("Helllllooooo");
         return opt1;
     }
 
