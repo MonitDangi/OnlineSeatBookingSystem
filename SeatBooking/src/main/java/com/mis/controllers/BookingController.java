@@ -8,6 +8,7 @@ import com.mis.bookingservices.SeatService;
 import com.mis.bookingservices.UserService;
 import com.mis.customclasses.Custom;
 import com.mis.customclasses.Location;
+import jakarta.mail.MessagingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class BookingController {
         return bookingService.findByLocation(location);
     }
     @PostMapping("/bookseat")
-    public ResponseEntity<String> bookseat(@RequestBody Custom custom) throws CustException, ParseException {
+    public ResponseEntity<String> bookseat(@RequestBody Custom custom) throws CustException, ParseException, MessagingException {
         bookingService.bookseat(custom);
         return new ResponseEntity<>("Seat Booked Successfully and a mail regarding the same has been sent to you registered mail id", HttpStatus.ACCEPTED);
     }

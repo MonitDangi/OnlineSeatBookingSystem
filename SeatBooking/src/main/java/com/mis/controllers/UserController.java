@@ -3,6 +3,7 @@ import com.mis.CustException.CustException;
 import com.mis.bookingmodels.User;
 import com.mis.bookingservices.UserService;
 import com.mis.customclasses.PassWord;
+import jakarta.mail.MessagingException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,13 +13,13 @@ public class UserController {
         this.userService = userService;
     }
     @PostMapping("/adduser")
-    public String adduser(@RequestBody  User user) throws CustException {
+    public String adduser(@RequestBody  User user) throws CustException, MessagingException {
         user.setUserType(0);
         userService.add(user);
         return "Added User Successfully";
     }
     @PostMapping("/addAdmin")
-    public String addAdmin(@RequestBody  User user) throws CustException {
+    public String addAdmin(@RequestBody  User user) throws CustException, MessagingException {
         user.setUserType(1);
         userService.add(user);
         return "Added User Successfully";
